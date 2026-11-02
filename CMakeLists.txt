@@ -5,12 +5,16 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
 
+set(CMAKE_AUTORCC ON)
+
 qt_add_executable(HalberdThreeKingdoms
     WIN32 MACOSX_BUNDLE
     main.cpp
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    resources.qrc
+    gameview.h gameview.cpp
 )
 
 target_link_libraries(HalberdThreeKingdoms
