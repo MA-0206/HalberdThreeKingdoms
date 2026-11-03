@@ -10,6 +10,7 @@ GameView::GameView(QWidget *parent): QWidget{parent}
 
 void GameView::init()
 {
+    this->setAttribute(Qt::WA_InputMethodEnabled,false);
     initSystems();
     initViewAppearance();
     initLayout();
@@ -41,7 +42,9 @@ void GameView::initViewAppearance()
     view->setAlignment(Qt::AlignLeft|Qt::AlignTop);
 
     view->setInteractive(false);
-    view->setFocusPolicy(Qt::StrongFocus);
+    view->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::StrongFocus);
+    view->installEventFilter(this);
 }
 
 // Use the layout to fill the window with the camera
@@ -75,10 +78,22 @@ void GameView::keyPressEvent(QKeyEvent* event)
     if(event->key()== Qt::Key_Left || event->key()== Qt::Key_A)
     {
         isLeftPressed = true;
+        qDebug()<<"isLeftPressed=true";
     }
     if(event->key()== Qt::Key_Right || event->key()== Qt::Key_D)
     {
         isRightPressed = true;
+        qDebug()<<"isRightPressed=true";
+    }
+    if(event->key()== Qt::Key_K || event->key()== Qt::Key_2)
+    {
+        isJumpPressed = true;
+        qDebug()<<"isJumpPressed = true";
+    }
+    if(event->key()== Qt::Key_J || event->key()== Qt::Key_1)
+    {
+        isAttackPressed = true;
+        qDebug()<<"is AttackPressed =true";
     }
 }
 
@@ -87,10 +102,23 @@ void GameView::keyReleaseEvent(QKeyEvent* event)
     if(event->key()== Qt::Key_Left || event->key()== Qt::Key_A)
     {
         isLeftPressed = false;
+        qDebug()<<"isLeftPressed = false";
     }
     if(event->key()== Qt::Key_Right || event->key()== Qt::Key_D)
     {
         isRightPressed = false;
+        qDebug()<<"isRightPressed = false";
+
+    }
+    if(event->key()== Qt::Key_K || event->key()== Qt::Key_2)
+    {
+        isJumpPressed = false;
+        qDebug()<<"isJumpPressed is false";
+    }
+    if(event->key()== Qt::Key_J || event->key()== Qt::Key_1)
+    {
+        isAttackPressed = false;
+        qDebug()<<"is AttackPressed = false";
     }
 }
 
@@ -136,34 +164,115 @@ void GameView::createPlayerItem()
 
 void GameView::upDateGame()
 {
-    handleInput();
+    if(!this->isActiveWindow())
+    {
+        isLeftPressed = false;
+        isRightPressed = false;
+        // return;
+    }
+    qreal dt = frameTimer.restart()/1000.0;
+    if(dt > 0.05)
+    {
+        dt = 0.05;
+    }
+    handleMove(dt);
+    applyGravity(dt);
+    updateState();
     updateAnimation();
     updateCamera();
 }
 
-void GameView::handleInput()
+void GameView::handleMove(qreal dt)
 {
-    qreal dt = frameTimer.restart()/1000.0;
+
     qreal speedPerSecond = 300.0;
     qreal moveDistance = speedPerSecond*dt;
-
-    bool isMoving = false;
 
     if(isRightPressed)
     {
         player->setX(player->x() + moveDistance);
-        isMoving = true;
         player->setTransform(QTransform());
     }
     if(isLeftPressed)
     {
         player->setX(player->x() - moveDistance);
-        isMoving = true;
         player->setTransform(QTransform::fromScale(-1,1));
     }
-    currentRow = isMoving? 1 : 0 ;
 }
 
+void GameView::updateState()
+{
+    if(isAttackPressed && currentState != playerState::Attack)
+    {
+        currentState = playerState::Attack;
+        isAttacking = true;
+        currentCol = 0;
+        animTimer = 0;
+        return;
+    }
+    if(currentState == playerState::Attack)
+    {
+        return;
+    }
+
+    switch(currentState)
+    {
+    case playerState::Idle:
+        if(!isOnGround)
+        {
+            currentState = playerState::Jump;
+        }
+        else if(isLeftPressed||isRightPressed)
+        {
+            currentState = playerState::Run;
+        }
+        break;
+
+    case playerState::Run:
+        if(!isOnGround)
+        {
+            currentState = playerState::Jump;
+        }
+        else if(!isLeftPressed && !isRightPressed)
+        {
+            currentState = playerState::Idle;
+        }
+        break;
+    case playerState::Jump:
+        if(isOnGround)
+        {
+            if(isLeftPressed||isRightPressed)
+            {
+                currentState = playerState::Run;
+            }
+            else{
+                currentState = playerState::Idle;
+            }
+        }
+        break;
+    }
+}
+
+// Gravity design for jumping and landing
+void GameView::applyGravity(qreal dt)
+{
+    if(isJumpPressed && isOnGround)
+    {
+        speedY = jumpSpeed;
+        isOnGround = false;
+    }
+    speedY += gravity * dt;
+    player->setY(player->y()+ speedY * dt);
+
+    if(player->y()>GROUND_Y)
+    {
+        player->setY(GROUND_Y);
+        speedY = 0;
+        isOnGround = true;
+    }
+}
+
+// Update character frame animation
 void GameView::updateAnimation()
 {
     animTimer++;
@@ -172,13 +281,42 @@ void GameView::updateAnimation()
         animTimer = 0;
 
         currentCol++;
-        if(currentCol>3)
+        if(currentState == playerState::Attack)
         {
-            currentCol = 0;
+            if(currentCol > 3)
+            {
+                currentCol = 0;
+
+                if(!isOnGround)
+                {
+                    currentState = playerState::Jump;
+                }
+                else if(isLeftPressed || isRightPressed)
+                {
+                    currentState = playerState::Run;
+                }
+                else{
+                    currentState = playerState::Idle;
+                }
+            }
+        }
+        else{
+                if(currentCol>3)
+                {
+                    currentCol = 0;
+                }
+            }
+        int row = 0;
+        switch(currentState)
+        {
+        case playerState::Idle: row = 0; break;
+        case playerState::Run: row = 1; break;
+        case playerState::Jump: row = 3; break;
+        case playerState::Attack: row = 2; break;
         }
 
         int x = currentCol * FrameWidth;
-        int y = currentRow * FrameHeight;
+        int y = row * FrameHeight;
 
         player->setPixmap(playerSpriteSheet.copy(x,y,FrameWidth,FrameHeight));
     }
@@ -188,4 +326,35 @@ void GameView::updateAnimation()
 void GameView::updateCamera()
 {
     view->centerOn(player);
+}
+
+// Window focus loss handling
+void GameView::focusOutEvent(QFocusEvent* event)
+{
+    isLeftPressed = false;
+    isRightPressed = false;
+
+    QWidget::focusOutEvent(event);
+}
+
+void GameView::changeEvent(QEvent* event)
+{
+    if(event->type()== QEvent::ActivationChange)
+    {
+        if(this->isActiveWindow())
+        {
+            this->setFocus();
+        }
+    }
+    QWidget::changeEvent(event);
+}
+
+bool GameView::eventFilter(QObject* watched,QEvent* event)
+{
+    if(watched == view && event->type()== QEvent::MouseButtonPress)
+    {
+        this->setFocus();
+    }
+
+    return QWidget::eventFilter(watched,event);
 }
