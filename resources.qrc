@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="mubg">assets/menu_background.png</file>
-        <file alias="level_one">assets/scroll_yellowTurban.png</file>
-        <file alias="liubei">assets/player_elf Picture_liubei.png</file>
-    </qresource>
-</RCC>

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/assets/images/characters/liubei">
+        <file alias="lb_idle">liubei_idle.png</file>
+        <file alias="lb_run">liubei_runFrames.png</file>
+        <file alias="lb_jump">liubei_jump.png</file>
+    </qresource>
+    <qresource prefix="/new/prefix1"/>
+</RCC>

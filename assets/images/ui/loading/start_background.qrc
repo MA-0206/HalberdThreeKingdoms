@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/assets/images/ui/loading">
+        <file alias="start_background">menu_background.png</file>
+    </qresource>
+    <qresource prefix="/new/prefix1"/>
+</RCC>

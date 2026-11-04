@@ -13,8 +13,11 @@ qt_add_executable(HalberdThreeKingdoms
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
-    resources.qrc
     gameview.h gameview.cpp
+    animator.h animator.cpp
+    assets/images/characters/liubei/liubei.qrc
+    assets/images/ui/loading/start_background.qrc
+    assets/images/maps/level_map/level_yellowscarf.qrc
 )
 
 target_link_libraries(HalberdThreeKingdoms

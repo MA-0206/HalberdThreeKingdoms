@@ -19,7 +19,7 @@ void MainWindow::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
-    QPixmap mubg(":/mubg");
+    QPixmap mubg(":/assets/images/ui/loading/start_background");
     if(mubg.isNull()){
         qDebug()<<"mubg upload failed!";
         painter.fillRect(0,0,this->width(),this->height(),Qt::red);

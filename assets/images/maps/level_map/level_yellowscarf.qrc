@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/assets/images/maps/level_map">
+        <file alias="level_one">scroll_yellowTurban.png</file>
+    </qresource>
+    <qresource prefix="/new/prefix1"/>
+</RCC>

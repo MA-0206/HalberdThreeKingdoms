@@ -57,7 +57,7 @@ void GameView::initLayout()
 // Turn the image into a physical object on stage
 bool GameView::initLevel()
 {
-    QPixmap mapPixmap(":/level_one");
+    QPixmap mapPixmap(":/assets/images/maps/level_map/level_one");
     if(mapPixmap.isNull())
     {
         qDebug()<<"the level_one map upload is failed";
@@ -75,12 +75,12 @@ bool GameView::initLevel()
 
 void GameView::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key()== Qt::Key_Left || event->key()== Qt::Key_A)
+    if(event->key()== Qt::Key_A || event->key()== Qt::Key_Left)
     {
         isLeftPressed = true;
         qDebug()<<"isLeftPressed=true";
     }
-    if(event->key()== Qt::Key_Right || event->key()== Qt::Key_D)
+    if(event->key()== Qt::Key_D || event->key()== Qt::Key_Right)
     {
         isRightPressed = true;
         qDebug()<<"isRightPressed=true";
@@ -99,12 +99,12 @@ void GameView::keyPressEvent(QKeyEvent* event)
 
 void GameView::keyReleaseEvent(QKeyEvent* event)
 {
-    if(event->key()== Qt::Key_Left || event->key()== Qt::Key_A)
+    if(event->key()== Qt::Key_A || event->key()== Qt::Key_Left)
     {
         isLeftPressed = false;
         qDebug()<<"isLeftPressed = false";
     }
-    if(event->key()== Qt::Key_Right || event->key()== Qt::Key_D)
+    if(event->key()== Qt::Key_D || event->key()== Qt::Key_Right)
     {
         isRightPressed = false;
         qDebug()<<"isRightPressed = false";
@@ -131,30 +131,29 @@ void GameView::initPlayer()
 // Load the sprite sheet and calculate the size
 void GameView::loadPlayerAssets()
 {
-    playerSpriteSheet.load(":/liubei");
-    if(playerSpriteSheet.isNull())
-    {
-        qDebug()<<"the player of liubei  is loading failed!";
-        return;
-    }
+    animator.addAnimation("lb_idle",QPixmap(":/assets/images/characters/liubei/lb_idle"),18,2,9,6);
+    animator.addAnimation("lb_run",QPixmap(":/assets/images/characters/liubei/lb_run"),5,1,5,3);
+    animator.addAnimation("lb_jump",QPixmap(":/assets/images/characters/liubei/lb_jump"),23,3,8,4);
+    animator.play("lb_idle");
 
-    FrameWidth = playerSpriteSheet.width()/4;
-    FrameHeight = playerSpriteSheet.height()/4;
+    frameWidth = animator.getCurrentPixmap().width();
+    frameHeight = animator.getCurrentPixmap().height();
 }
 
 // Create an player entity and put it in the scene
 void GameView::createPlayerItem()
 {
-    if(playerSpriteSheet.isNull())
+    QPixmap firstFrame = animator.getCurrentPixmap();
+    if(firstFrame.isNull())
     {
         return;
     }
+    int frameH = animator.getFrameHeight();
+    int frameW = animator.getFrameWidth();
 
-    QPixmap firstFrame = playerSpriteSheet.copy(0,0,FrameWidth,FrameHeight);
     player = new QGraphicsPixmapItem(firstFrame);
-
-    player->setScale(0.4);
-    player->setOffset(-FrameWidth/2,-FrameHeight);
+    player->setScale(1.0);
+    player->setOffset(-frameW/2,-frameH);
     player->setPos(500,650);
     player->setZValue(10);
 
@@ -205,24 +204,32 @@ void GameView::updateState()
     if(isAttackPressed && currentState != playerState::Attack)
     {
         currentState = playerState::Attack;
-        isAttacking = true;
-        currentCol = 0;
-        animTimer = 0;
         return;
     }
-    if(currentState == playerState::Attack)
-    {
-        return;
-    }
-
     switch(currentState)
     {
+    case playerState::Attack:
+        if(animator.isFinshed())
+        {
+            if(!isOnGround)
+            {
+                currentState = playerState::Jump;
+            }
+            else if(isLeftPressed || isRightPressed)
+            {
+                currentState = playerState::Run;
+            }
+            else{
+                currentState = playerState::Idle;
+            }
+        }
+        break;
     case playerState::Idle:
         if(!isOnGround)
         {
             currentState = playerState::Jump;
         }
-        else if(isLeftPressed||isRightPressed)
+        else if(isLeftPressed || isRightPressed)
         {
             currentState = playerState::Run;
         }
@@ -241,7 +248,7 @@ void GameView::updateState()
     case playerState::Jump:
         if(isOnGround)
         {
-            if(isLeftPressed||isRightPressed)
+            if(isLeftPressed || isRightPressed)
             {
                 currentState = playerState::Run;
             }
@@ -275,52 +282,23 @@ void GameView::applyGravity(qreal dt)
 // Update character frame animation
 void GameView::updateAnimation()
 {
-    animTimer++;
-    if(animTimer >= 6)
+    switch(currentState)
     {
-        animTimer = 0;
-
-        currentCol++;
+    case playerState::Idle: animator.play("lb_idle"); break;
+    case playerState::Run: animator.play("lb_run"); break;
+    case playerState::Jump: animator.play("lb_jump"); break;
+    case playerState::Attack: animator.play("lb_attack"); break;
+    }
+    animator.update();
         if(currentState == playerState::Attack)
         {
-            if(currentCol > 3)
-            {
-                currentCol = 0;
-
-                if(!isOnGround)
-                {
-                    currentState = playerState::Jump;
-                }
-                else if(isLeftPressed || isRightPressed)
-                {
-                    currentState = playerState::Run;
-                }
-                else{
-                    currentState = playerState::Idle;
-                }
-            }
+            isAttacking = false;
         }
-        else{
-                if(currentCol>3)
-                {
-                    currentCol = 0;
-                }
-            }
-        int row = 0;
-        switch(currentState)
+        QPixmap currentPix = animator.getCurrentPixmap();
+        if(!currentPix.isNull())
         {
-        case playerState::Idle: row = 0; break;
-        case playerState::Run: row = 1; break;
-        case playerState::Jump: row = 3; break;
-        case playerState::Attack: row = 2; break;
+            player->setPixmap(currentPix);
         }
-
-        int x = currentCol * FrameWidth;
-        int y = row * FrameHeight;
-
-        player->setPixmap(playerSpriteSheet.copy(x,y,FrameWidth,FrameHeight));
-    }
-
 }
 
 void GameView::updateCamera()

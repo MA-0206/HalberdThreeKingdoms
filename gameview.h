@@ -11,6 +11,7 @@
 #include <QElapsedTimer>
 #include <QFocusEvent>
 #include <QMouseEvent>
+#include "animator.h"
 
 enum class playerState{
     Idle,
@@ -51,16 +52,25 @@ private:
     void initTimer();
 
 private:
+    Animator animator;
+
     // Elf Picture
-    QPixmap playerSpriteSheet;
+    // QPixmap playerSpriteSheet;
+    // QPixmap idleSheet;
+    // QPixmap runSheet;
+    // QPixmap jumpSheet;
+    // QPixmap attackSheet;
+    // QPixmap currentSheet;
     QElapsedTimer frameTimer;
-    int FrameWidth;
-    int FrameHeight;
+    int frameWidth;
+    int frameHeight;
+    // int runFrameWidth;
+    // int runFrameHeight;
 
     // Animation Control
-    int currentRow  = 0;
-    int currentCol = 0;
-    int animTimer = 0;
+    // int currentRow  = 0;
+    // int currentCol = 0;
+    // int animTimer = 0;
 
     bool isOnGround = false;
     bool isLeftPressed = false;
@@ -84,6 +94,12 @@ private:
     qreal gravity = 2000.0;
     qreal jumpSpeed = -800.0;
 
+private:
+    // int idleFrames = 5;
+    // int runFrames = 5;
+    // int jumpFrames = 4;
+    // int attackFrames = 5;
+    // int maxFrames = 0;
 
 private slots:
 
