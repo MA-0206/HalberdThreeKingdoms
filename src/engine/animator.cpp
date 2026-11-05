@@ -1,5 +1,6 @@
 #include "animator.h"
 #include <QDebug>
+
 Animator::Animator():currentFrame(0),timer(0),finshed(false) {}
 
 void Animator::addAnimation(const QString& name, const QPixmap& sheet, int totalFrames, int rows,

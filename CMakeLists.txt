@@ -9,21 +9,35 @@ set(CMAKE_AUTORCC ON)
 
 qt_add_executable(HalberdThreeKingdoms
     WIN32 MACOSX_BUNDLE
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-    gameview.h gameview.cpp
-    animator.h animator.cpp
+    src/main.cpp
+    src/ui/screens/mainwindow.cpp
+    src/ui/screens/mainwindow.h
+    src/ui/screens/mainwindow.ui
+    src/engine/gameview.h
+    src/engine/gameview.cpp
+    src/engine/animator.h
+    src/engine/animator.cpp
     assets/images/characters/liubei/liubei.qrc
     assets/images/ui/loading/start_background.qrc
     assets/images/maps/level_map/level_yellowscarf.qrc
+    src/entities/EntityState.h
+    src/entities/entity.h src/entities/entity.cpp
+    src/entities/player/player.h src/entities/player/player.cpp
 )
 
 target_link_libraries(HalberdThreeKingdoms
     PRIVATE
         Qt::Core
         Qt::Widgets
+)
+
+target_include_directories(HalberdThreeKingdoms PRIVATE
+    src
+    src/engine
+    src/entities
+    src/ui/screens
+    src/ui
+    src/entities/player
 )
 
 install(TARGETS HalberdThreeKingdoms

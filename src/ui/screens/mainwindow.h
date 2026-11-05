@@ -21,18 +21,18 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
-public:
     static const int WINDOW_WIDTH = 1280;
     static const int WINDOW_HEIGHT = 720;
 
 protected:
     void paintEvent(QPaintEvent *event)override;
 
-private slots:
-    void on_pushButtonStartGame_clicked();
-
 private:
     Ui::MainWindow *ui;
     std::unique_ptr<GameView> m_gameview;
+
+private slots:
+    void on_pushButtonStartGame_clicked();
+
 };
 #endif // MAINWINDOW_H

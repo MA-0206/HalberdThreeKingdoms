@@ -25,7 +25,6 @@ void MainWindow::paintEvent(QPaintEvent* event)
         painter.fillRect(0,0,this->width(),this->height(),Qt::red);
         return;
     }
-    // painter.drawPixmap(0,0,this->width(),this->height(),mubg);
 
     // Image Anti-Aliasing
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
@@ -35,6 +34,7 @@ void MainWindow::paintEvent(QPaintEvent* event)
     int y =(this->height() - suitbg.height())/2;
     painter.drawPixmap(x,y,suitbg);
 }
+
 void MainWindow::on_pushButtonStartGame_clicked()
 {
     this->hide();

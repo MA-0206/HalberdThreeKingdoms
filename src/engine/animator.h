@@ -19,7 +19,6 @@ class Animator
 {
 public:
     Animator();
-
     void addAnimation(const QString& name, const QPixmap& sheet, int totalFrames, int rows,
                       int cols, int tickRate);
     void play(const QString& name);
@@ -31,7 +30,6 @@ public:
 
 private:
     QMap<QString,AnimationData>animations;
-
     QString currentAnimation;
     int currentFrame;
     int timer;
