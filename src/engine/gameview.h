@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 #include "animator.h"
 #include "player.h"
+#include "gamehud.h"
 
 class GameView : public QWidget
 {
@@ -38,10 +39,12 @@ private:
     void initLayout();
     bool initLevel();
     void initPlayer();
+    void initGameHud();
 
 private:
     Animator animator;
-    Player *player;
+    Player* player;
+    GameHud* gameHud;
     QElapsedTimer frameTimer;
 
     bool isLeftPressed = false;

@@ -5,6 +5,25 @@
 #include "Animator.h"
 #include "EntityState.h"
 
+
+struct BaseAttributes {
+    int maxHp = 100;
+    int maxMp = 50;
+    int maxExp = 100;
+};
+
+struct RunTimeState {
+    int hp = 100;
+    int mp = 50;
+    int exp = 0;
+    int level = 1;
+};
+
+struct EntityStats {
+    BaseAttributes base;
+    RunTimeState runtime;
+};
+
 class Entity : public QGraphicsPixmapItem
 {
 public:
@@ -13,7 +32,9 @@ public:
 
     virtual void update(qreal dt)= 0;
 
+    const EntityStats& getStats()const {return stats;}
 protected:
+    EntityStats stats;
     // General components and states
     Animator animator;
     EntityState currentState = EntityState::Idle;

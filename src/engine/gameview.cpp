@@ -75,9 +75,19 @@ bool GameView::initLevel()
 // Create an player entity and put it in the scene
 void GameView::initPlayer()
 {
-    player = new Player();
+    CharacterConfig liubeiConfig;
+    liubeiConfig.baseHp = 100;
+    liubeiConfig.baseMp = 50;
+    liubeiConfig.baseExp = 100;
+    liubeiConfig.hpGrowth = 20;
+
+    player = new Player(liubeiConfig);
     scene->addItem(player);
     view->centerOn(player);
+
+    gameHud = new GameHud(this);
+    initGameHud();
+    gameHud->setAvatar(":/assets/images/characters/liubei/lb_avatar");
 }
 
 void GameView::upDateGame()
@@ -93,10 +103,18 @@ void GameView::upDateGame()
     {
         dt = 0.05;
     }
-
     player->handleInput(isLeftPressed, isRightPressed, isJumpPressed, isAttackPressed);
     player->update(dt);
     updateCamera();
+    gameHud->updateStats(player->getStats());
+}
+
+void GameView::initGameHud()
+{
+    gameHud->move(10,10);
+    gameHud->raise();
+    gameHud->show();
+    gameHud->updateStats(player->getStats());
 }
 
 void GameView::updateCamera()
@@ -126,6 +144,10 @@ void GameView::keyPressEvent(QKeyEvent* event)
         isAttackPressed = true;
         qDebug()<<"is AttackPressed =true";
     }
+    if(event->key()== Qt::Key_H)
+        player->takeDamage(10);
+    if(event->key()== Qt::Key_B)
+        player->heal(20);
 }
 
 void GameView::keyReleaseEvent(QKeyEvent* event)

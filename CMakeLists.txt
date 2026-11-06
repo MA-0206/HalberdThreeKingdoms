@@ -23,6 +23,7 @@ qt_add_executable(HalberdThreeKingdoms
     src/entities/EntityState.h
     src/entities/entity.h src/entities/entity.cpp
     src/entities/player/player.h src/entities/player/player.cpp
+    src/ui/hud/gamehud.h src/ui/hud/gamehud.cpp
 )
 
 target_link_libraries(HalberdThreeKingdoms
@@ -35,9 +36,10 @@ target_include_directories(HalberdThreeKingdoms PRIVATE
     src
     src/engine
     src/entities
-    src/ui/screens
-    src/ui
     src/entities/player
+    src/ui
+    src/ui/screens
+    src/ui/hud
 )
 
 install(TARGETS HalberdThreeKingdoms

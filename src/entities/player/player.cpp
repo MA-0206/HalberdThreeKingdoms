@@ -1,8 +1,22 @@
 #include "player.h"
 
-Player::Player(QGraphicsItem* parent):Entity(parent)
+Player::Player(CharacterConfig& config, QGraphicsItem* parent):Entity(parent),myConfig(config)
 {
+    initStats();
     loadPlayerAssets();
+}
+
+void Player::initStats()
+{
+    stats.runtime.level = 1;
+    stats.base.maxHp = myConfig.baseHp;
+    stats.base.maxMp = myConfig.baseMp;
+    stats.base.maxExp = myConfig.baseExp;
+
+    stats.runtime.hp = stats.base.maxHp;
+    stats.runtime.mp = stats.base.maxMp;
+    stats.runtime.exp = 0;
+
 }
 
 // Load the sprite sheet and calculate the size
@@ -51,6 +65,24 @@ void Player::handleMove(qreal dt)
     {
         setX(x()- moveDistance);
         setTransform(QTransform::fromScale(-1,1));
+    }
+}
+
+void Player::takeDamage(int damage)
+{
+    stats.runtime.hp -= damage;
+    if(stats.runtime.hp < 0)
+    {
+        stats.runtime.hp = 0;
+    }
+}
+
+void Player::heal(int amount)
+{
+    stats.runtime.hp += amount;
+    if(stats.runtime.hp > stats.base.maxHp)
+    {
+        stats.runtime.hp = stats.base.maxHp;
     }
 }
 
