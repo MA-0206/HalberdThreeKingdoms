@@ -10,7 +10,7 @@
 #include <QFocusEvent>
 #include <QMouseEvent>
 #include "animator.h"
-#include "player.h"
+#include "world.h"
 #include "gamehud.h"
 
 class GameView : public QWidget
@@ -38,12 +38,11 @@ private:
     void initViewAppearance();
     void initLayout();
     bool initLevel();
-    void initPlayer();
+    void initWorld();
     void initGameHud();
 
 private:
-    Animator animator;
-    Player* player;
+    World* world;
     GameHud* gameHud;
     QElapsedTimer frameTimer;
 

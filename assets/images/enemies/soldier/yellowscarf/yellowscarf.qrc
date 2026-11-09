@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/assets/images/enemies/yellowscarf">
+        <file alias="ys_idle">yellowrefugees_idle.png</file>
+        <file alias="ys_run">yellowrefugees_run.png</file>
+    </qresource>
+</RCC>

@@ -3,6 +3,7 @@
 
 Animator::Animator():currentFrame(0),timer(0),finshed(false) {}
 
+
 void Animator::addAnimation(const QString& name, const QPixmap& sheet, int totalFrames, int rows,
                             int cols, int tickRate)
 {
@@ -26,6 +27,7 @@ void Animator::addAnimation(const QString& name, const QPixmap& sheet, int total
     qDebug()<<"sheet:"<<sheet;
 }
 
+// Play the animation
 void Animator::play(const QString& name)
 {
     if(currentAnimation == name && !finshed)
@@ -64,6 +66,7 @@ void Animator::update()
     }
 }
 
+// Obtain the original sprite image
 QPixmap Animator::getCurrentPixmap()const
 {
     if(currentAnimation.isEmpty() || !animations.contains(currentAnimation))

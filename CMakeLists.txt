@@ -24,6 +24,9 @@ qt_add_executable(HalberdThreeKingdoms
     src/entities/entity.h src/entities/entity.cpp
     src/entities/player/player.h src/entities/player/player.cpp
     src/ui/hud/gamehud.h src/ui/hud/gamehud.cpp
+    src/entities/enemy/enemy.h src/entities/enemy/enemy.cpp
+    assets/images/enemies/soldier/yellowscarf/yellowscarf.qrc
+    src/world/world.h src/world/world.cpp
 )
 
 target_link_libraries(HalberdThreeKingdoms
@@ -37,9 +40,11 @@ target_include_directories(HalberdThreeKingdoms PRIVATE
     src/engine
     src/entities
     src/entities/player
+    src/entities/enemy
     src/ui
     src/ui/screens
     src/ui/hud
+    src/world
 )
 
 install(TARGETS HalberdThreeKingdoms

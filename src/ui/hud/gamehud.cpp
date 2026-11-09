@@ -17,6 +17,7 @@ void GameHud::setAvatar(const QString& imagePath)
         update();
 }
 
+// Reissue the painting brush event
 void GameHud::paintEvent(QPaintEvent* event)
 {
     // No interaction of the screen
@@ -34,13 +35,15 @@ void GameHud::paintEvent(QPaintEvent* event)
     paintLevelText(&painter);
 }
 
+// Render the background frame
 void GameHud::paintBackGround(QPainter* painter)
 {
-    painter->setBrush(QColor(0,0,0,150));
+    painter->setBrush(QColor(0,0,0,10));
     painter->setPen(Qt::NoPen);
     painter->drawRoundedRect(0,0,260,75,5,5);
 }
 
+// Render the player's avatar
 void GameHud::paintAvatar(QPainter* painter)
 {
     int avatarX = 7;
@@ -51,7 +54,6 @@ void GameHud::paintAvatar(QPainter* painter)
     painter->setBrush(QColor(50,50,50));
     painter->setPen(Qt::NoPen);
     painter->drawEllipse(avatarX, avatarY, avatarSize, avatarSize);
-    // painter.drawRoundedRect(5,5,40,40,5,5);
 
     if(!m_avatar.isNull())
     {
@@ -68,6 +70,7 @@ void GameHud::paintAvatar(QPainter* painter)
 
 }
 
+// Rendering level text
 void  GameHud::paintLevelText(QPainter* painter)
 {
     QFont font("Microsoft YaHei",10,QFont::Bold);
@@ -76,6 +79,7 @@ void  GameHud::paintLevelText(QPainter* painter)
     painter->drawText(60,72,QString("Lv.%1").arg(m_stats.runtime.level));
 }
 
+// Rendering the magic bar, health bar, experience bar and their corresponding texts
 void GameHud::paintBarAndText(QPainter* painter, const BarConfig& config, float currentVal, float maxVal)
 {
     painter->setPen(Qt::white);

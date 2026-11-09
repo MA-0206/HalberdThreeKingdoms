@@ -4,8 +4,10 @@ Player::Player(CharacterConfig& config, QGraphicsItem* parent):Entity(parent),my
 {
     initStats();
     loadPlayerAssets();
+    setZValue(11);
 }
 
+// Initialize character status
 void Player::initStats()
 {
     stats.runtime.level = 1;
@@ -51,6 +53,7 @@ void Player::handleInput(bool left, bool right, bool jump, bool attack)
     isAttackPressed = attack;
 }
 
+// Player movement logic
 void Player::handleMove(qreal dt)
 {
     qreal moveSpeed = 300.0;
@@ -65,24 +68,6 @@ void Player::handleMove(qreal dt)
     {
         setX(x()- moveDistance);
         setTransform(QTransform::fromScale(-1,1));
-    }
-}
-
-void Player::takeDamage(int damage)
-{
-    stats.runtime.hp -= damage;
-    if(stats.runtime.hp < 0)
-    {
-        stats.runtime.hp = 0;
-    }
-}
-
-void Player::heal(int amount)
-{
-    stats.runtime.hp += amount;
-    if(stats.runtime.hp > stats.base.maxHp)
-    {
-        stats.runtime.hp = stats.base.maxHp;
     }
 }
 
@@ -143,5 +128,57 @@ void Player::updateState()
             }
         }
         break;
+    }
+}
+
+void Player::takeDamage(int damage)
+{
+    stats.runtime.hp -= damage;
+    if(stats.runtime.hp < 0)
+    {
+        stats.runtime.hp = 0;
+    }
+}
+
+void Player::heal(int amount)
+{
+    stats.runtime.hp += amount;
+    if(stats.runtime.hp > stats.base.maxHp)
+    {
+        stats.runtime.hp = stats.base.maxHp;
+    }
+}
+
+void Player::replayMagic(int magic)
+{
+    stats.runtime.mp += magic;
+    if(stats.runtime.mp > stats.base.maxMp)
+    {
+        stats.runtime.mp = stats.base.maxMp;
+    }
+}
+
+void Player::deleteMagic(int magic)
+{
+    stats.runtime.mp -= magic;
+    if(stats.runtime.mp < 0)
+    {
+        stats.runtime.mp = 0;
+    }
+}
+
+void Player::addExp(int exp)
+{
+    stats.runtime.exp += exp;
+    if(stats.runtime.exp > stats.base.maxExp)
+    {
+        if(stats.runtime.level > stats.base.maxLevel)
+        {
+            stats.runtime.exp = stats.base.maxExp;
+            stats.runtime.level = stats.base.maxLevel;
+            return;
+        }
+        stats.runtime.exp -= stats.base.maxExp;
+        stats.runtime.level++;
     }
 }

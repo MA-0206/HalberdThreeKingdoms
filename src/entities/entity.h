@@ -10,6 +10,7 @@ struct BaseAttributes {
     int maxHp = 100;
     int maxMp = 50;
     int maxExp = 100;
+    int maxLevel = 80;
 };
 
 struct RunTimeState {
@@ -34,6 +35,8 @@ public:
 
     const EntityStats& getStats()const {return stats;}
 protected:
+    virtual void updateState() = 0;
+
     EntityStats stats;
     // General components and states
     Animator animator;
@@ -48,9 +51,6 @@ protected:
     bool isOnGround = false;
     void applyGravity(qreal dt, bool JumpPressed, qreal jumpSpeed);
     void updateAnimation();
-
-    virtual void updateState() = 0;
-
 };
 
 #endif // ENTITY_H

@@ -18,9 +18,10 @@ void GameView::init()
         QMessageBox::critical(this,"ERROR","the map sources is loading failed!");
         return;
     }
-    initPlayer();
+    initWorld();
 }
 
+// Initialization interface resources
 void GameView::initSystems()
 {
     scene = new QGraphicsScene(this);
@@ -72,19 +73,18 @@ bool GameView::initLevel()
     return true;
 }
 
-// Create an player entity and put it in the scene
-void GameView::initPlayer()
+// Initialize the world and render
+void GameView::initWorld()
 {
-    CharacterConfig liubeiConfig;
-    liubeiConfig.baseHp = 100;
-    liubeiConfig.baseMp = 50;
-    liubeiConfig.baseExp = 100;
-    liubeiConfig.hpGrowth = 20;
+    world = new World();
+    scene->addItem(world->getPlayer());
+    view->centerOn(world->getPlayer());
 
-    player = new Player(liubeiConfig);
-    scene->addItem(player);
-    view->centerOn(player);
+    Enemy* e1 = world->spawnTestEnemy(500,650);
+    scene->addItem(e1);
 
+    Enemy* e2 = world->spawnTestEnemy(700,650);
+    scene->addItem(e2);
     gameHud = new GameHud(this);
     initGameHud();
     gameHud->setAvatar(":/assets/images/characters/liubei/lb_avatar");
@@ -103,23 +103,23 @@ void GameView::upDateGame()
     {
         dt = 0.05;
     }
-    player->handleInput(isLeftPressed, isRightPressed, isJumpPressed, isAttackPressed);
-    player->update(dt);
+    world->update(dt, isLeftPressed, isRightPressed, isJumpPressed, isAttackPressed);
     updateCamera();
-    gameHud->updateStats(player->getStats());
+    gameHud->updateStats(world->getPlayer()->getStats());
 }
 
+// Initialize the health bar system
 void GameView::initGameHud()
 {
     gameHud->move(10,10);
     gameHud->raise();
     gameHud->show();
-    gameHud->updateStats(player->getStats());
+    gameHud->updateStats(world->getPlayer()->getStats());
 }
 
 void GameView::updateCamera()
 {
-    view->centerOn(player);
+    view->centerOn(world->getPlayer());
 }
 
 void GameView::keyPressEvent(QKeyEvent* event)
@@ -145,9 +145,9 @@ void GameView::keyPressEvent(QKeyEvent* event)
         qDebug()<<"is AttackPressed =true";
     }
     if(event->key()== Qt::Key_H)
-        player->takeDamage(10);
+        world->getPlayer()->takeDamage(10);
     if(event->key()== Qt::Key_B)
-        player->heal(20);
+        world->getPlayer()->heal(20);
 }
 
 void GameView::keyReleaseEvent(QKeyEvent* event)

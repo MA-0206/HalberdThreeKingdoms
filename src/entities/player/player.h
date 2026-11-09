@@ -23,6 +23,10 @@ public:
     void handleInput(bool left, bool right, bool jump, bool attack);
     void takeDamage(int damage);
     void heal(int amount);
+    void replayMagic(int magic);
+    void deleteMagic(int magic);
+    void addExp(int exp);
+
 
 protected:
     void updateState()override;
