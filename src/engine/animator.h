@@ -27,6 +27,7 @@ public:
     bool isFinshed() const;
     int getFrameWidth() const;
     int getFrameHeight() const;
+    int getCurrentFrame() const;
 
 private:
     QMap<QString,AnimationData>animations;

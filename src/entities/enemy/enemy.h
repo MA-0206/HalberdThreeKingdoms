@@ -17,10 +17,14 @@ public:
     Enemy(const EnemyConfig& config, QGraphicsItem* parent = nullptr);
     ~Enemy() = default;
 
-    void update(qreal dt)override;
+    void update(qreal dt) override;
+    // bool isAttackActive() const override;
+    // QRectF getAttackBox() const override;
 
 protected:
-    void updateState()override;
+    void updateState() override;
+    void onHurt() override;
+    void onDeath() override;
 
 private:
     EnemyConfig myConfig;

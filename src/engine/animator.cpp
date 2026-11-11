@@ -103,7 +103,16 @@ int Animator::getFrameHeight() const
     return animations[currentAnimation].frameHeight;
 }
 
-bool Animator::isFinshed()const
+int Animator::getCurrentFrame() const
+{
+    if(currentAnimation.isEmpty() || animations.contains(currentAnimation))
+    {
+        qDebug()<<"have no the animation";
+    }
+    return currentFrame;
+}
+
+bool Animator::isFinshed() const
 {
     return finshed;
 }

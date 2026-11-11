@@ -10,8 +10,6 @@ void Enemy::update(qreal dt)
 {
     applyGravity(dt,false,0);
     updatePatrol(dt);
-    updateState();
-    updateAnimation();
 }
 
 // Load the animation of the minor monster
@@ -74,9 +72,30 @@ void Enemy::updatePatrol(qreal dt)
     }
 }
 
+void Enemy::onHurt()
+{
+    qDebug()<<"the small enemy is onHurt the hp:"<< stats.runtime.hp;
+    currentState = EntityState::Hurt;
+}
+
+void Enemy::onDeath()
+{
+    qDebug()<<"the small enemy is onDeath";
+    currentState = EntityState::Dead;
+}
+
 // Enemy State Machine
 void Enemy::updateState()
 {
+    if(currentState == EntityState::Dead) return;
+    if(currentState == EntityState::Hurt)
+    {
+        if(hurtStunTimer <= 0)
+        {
+            currentState = EntityState::Idle;
+        }
+        return;
+    }
     switch(currentState)
     {
     case EntityState::Jump:

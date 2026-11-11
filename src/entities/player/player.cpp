@@ -39,10 +39,14 @@ void Player::loadPlayerAssets()
 
 void Player::update(qreal dt)
 {
+    if(currentState == EntityState::Dead)
+    {
+        applyGravity(dt, false, 0);
+        return;
+    }
     handleMove(dt);
     applyGravity(dt,isJumpPressed,-800);
-    updateState();
-    updateAnimation();
+
 }
 
 void Player::handleInput(bool left, bool right, bool jump, bool attack)
@@ -71,8 +75,50 @@ void Player::handleMove(qreal dt)
     }
 }
 
+bool Player::isAttackActive() const
+{
+    return(currentState == EntityState::Attack && animator.getCurrentFrame() == 1);
+}
+
+QRectF Player::getAttackBox() const
+{
+    qreal atkWidth = animator.getFrameWidth()* 0.4;
+    qreal atkHeight = animator.getFrameHeight()* 0.6;
+
+    qreal offSetX = animator.getFrameWidth()* 0.1;
+    qreal top = y()- (animator.getFrameHeight()*0.8);
+    qreal left;
+    if(transform().m11() > 0)
+    {
+        left = x() + offSetX;
+    }
+    else{
+        left = x() - atkWidth - offSetX;
+    }
+    return QRectF(left, top, atkWidth, atkHeight);
+}
+
+void Player::onHurt()
+{
+    qDebug()<<"the player is onhurt hp:"<< stats.runtime.hp;
+}
+
+void Player::onDeath()
+{
+    qDebug()<<"the player is onDeath,the game is over";
+}
+
 void Player::updateState()
 {
+    if(currentState == EntityState::Dead) return;
+    if(currentState == EntityState::Hurt)
+    {
+        if(hurtStunTimer <= 0.0)
+        {
+            currentState = isOnGround? currentState = EntityState::Idle: currentState = EntityState::Jump;
+        }
+        return;
+    }
     if(isAttackPressed && currentState != EntityState::Attack)
     {
         currentState = EntityState::Attack;
@@ -128,15 +174,6 @@ void Player::updateState()
             }
         }
         break;
-    }
-}
-
-void Player::takeDamage(int damage)
-{
-    stats.runtime.hp -= damage;
-    if(stats.runtime.hp < 0)
-    {
-        stats.runtime.hp = 0;
     }
 }
 

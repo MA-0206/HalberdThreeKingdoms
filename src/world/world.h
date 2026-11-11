@@ -12,6 +12,8 @@ public:
     ~World();
 
     void update(qreal dt, bool left, bool right, bool jump, bool attack);
+    void checkCombat();
+    void cleanUpDeadEnemies();
     Player* getPlayer()const {return player;}
     Enemy* spawnTestEnemy(qreal x, qreal y);
 

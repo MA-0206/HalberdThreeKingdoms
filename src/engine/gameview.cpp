@@ -69,7 +69,6 @@ bool GameView::initLevel()
     mapItem->setZValue(-1);
     scene->addItem(mapItem);
     scene->setSceneRect(0,0,mapPixmap.width(),mapPixmap.height());
-
     return true;
 }
 
@@ -127,22 +126,22 @@ void GameView::keyPressEvent(QKeyEvent* event)
     if(event->key()== Qt::Key_A || event->key()== Qt::Key_Left)
     {
         isLeftPressed = true;
-        qDebug()<<"isLeftPressed=true";
+        // qDebug()<<"isLeftPressed=true";
     }
     if(event->key()== Qt::Key_D || event->key()== Qt::Key_Right)
     {
         isRightPressed = true;
-        qDebug()<<"isRightPressed=true";
+        // qDebug()<<"isRightPressed=true";
     }
     if(event->key()== Qt::Key_K || event->key()== Qt::Key_2)
     {
         isJumpPressed = true;
-        qDebug()<<"isJumpPressed = true";
+        // qDebug()<<"isJumpPressed = true";
     }
     if(event->key()== Qt::Key_J || event->key()== Qt::Key_1)
     {
         isAttackPressed = true;
-        qDebug()<<"is AttackPressed =true";
+        // qDebug()<<"is AttackPressed =true";
     }
     if(event->key()== Qt::Key_H)
         world->getPlayer()->takeDamage(10);
@@ -155,23 +154,23 @@ void GameView::keyReleaseEvent(QKeyEvent* event)
     if(event->key()== Qt::Key_A || event->key()== Qt::Key_Left)
     {
         isLeftPressed = false;
-        qDebug()<<"isLeftPressed = false";
+        // qDebug()<<"isLeftPressed = false";
     }
     if(event->key()== Qt::Key_D || event->key()== Qt::Key_Right)
     {
         isRightPressed = false;
-        qDebug()<<"isRightPressed = false";
+        // qDebug()<<"isRightPressed = false";
 
     }
     if(event->key()== Qt::Key_K || event->key()== Qt::Key_2)
     {
         isJumpPressed = false;
-        qDebug()<<"isJumpPressed is false";
+        // qDebug()<<"isJumpPressed is false";
     }
     if(event->key()== Qt::Key_J || event->key()== Qt::Key_1)
     {
         isAttackPressed = false;
-        qDebug()<<"is AttackPressed = false";
+        // qDebug()<<"is AttackPressed = false";
     }
 }
 
