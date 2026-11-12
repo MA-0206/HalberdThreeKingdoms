@@ -87,7 +87,7 @@ int Animator::getFrameWidth() const
 {
     if(currentAnimation.isEmpty() || !animations.contains(currentAnimation))
     {
-        qDebug()<<"have no the animation";
+        qDebug()<<"have no the getFrameWidth";
         return 0;
     }
     return animations[currentAnimation].frameWidth;
@@ -97,7 +97,7 @@ int Animator::getFrameHeight() const
 {
     if(currentAnimation.isEmpty() || !animations.contains(currentAnimation))
     {
-        qDebug()<<"have no the animation";
+        qDebug()<<"have no the getFrameHeight";
         return 0;
     }
     return animations[currentAnimation].frameHeight;
@@ -105,9 +105,9 @@ int Animator::getFrameHeight() const
 
 int Animator::getCurrentFrame() const
 {
-    if(currentAnimation.isEmpty() || animations.contains(currentAnimation))
+    if(currentAnimation.isEmpty() || !animations.contains(currentAnimation))
     {
-        qDebug()<<"have no the animation";
+        qDebug()<<"have no the getCurrentFrame";
     }
     return currentFrame;
 }

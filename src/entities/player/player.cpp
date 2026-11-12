@@ -2,6 +2,7 @@
 
 Player::Player(CharacterConfig& config, QGraphicsItem* parent):Entity(parent),myConfig(config)
 {
+    faction = Faction::Player;
     initStats();
     loadPlayerAssets();
     setZValue(11);
@@ -11,23 +12,28 @@ Player::Player(CharacterConfig& config, QGraphicsItem* parent):Entity(parent),my
 void Player::initStats()
 {
     stats.runtime.level = 1;
-    stats.base.maxHp = myConfig.baseHp;
-    stats.base.maxMp = myConfig.baseMp;
+    stats.base.name   = myConfig.name;
+    stats.base.maxHp  = myConfig.baseHp;
+    stats.base.maxMp  = myConfig.baseMp;
     stats.base.maxExp = myConfig.baseExp;
 
-    stats.runtime.hp = stats.base.maxHp;
-    stats.runtime.mp = stats.base.maxMp;
-    stats.runtime.exp = 0;
+    stats.runtime.name = stats.base.name;
+    stats.runtime.hp   = stats.base.maxHp;
+    stats.runtime.mp   = stats.base.maxMp;
+    stats.runtime.exp  = 0;
 
 }
 
 // Load the sprite sheet and calculate the size
 void Player::loadPlayerAssets()
 {
-    animator.addAnimation("idle",QPixmap(":/assets/images/characters/liubei/lb_idle"),18,2,9,6);
-    animator.addAnimation("run",QPixmap(":/assets/images/characters/liubei/lb_run"),7,1,7,3);
-    animator.addAnimation("jump",QPixmap(":/assets/images/characters/liubei/lb_jump"),23,3,8,4);
-    animator.addAnimation("attack",QPixmap(":/assets/images/characters/liubei/lb_attack"),11,2,6,2);
+    QString path = ":/assets/images/characters/" + myConfig.name + "/";
+    animator.addAnimation("idle",QPixmap(path + "lb_idle"),18,2,9,6);
+    animator.addAnimation("run",QPixmap(path + "lb_run"),7,1,7,3);
+    animator.addAnimation("jump",QPixmap(path + "lb_jump"),23,3,8,4);
+    animator.addAnimation("attack",QPixmap(path + "lb_attack"),11,2,6,2);
+    animator.addAnimation("hurt",QPixmap(path + "lb_hurt"),9,2,5,3);
+    animator.addAnimation("dead", QPixmap(path + "lb_dead"),16,2,8,4);
 
     animator.play("idle");
     setScale(1.0);
@@ -98,34 +104,34 @@ QRectF Player::getAttackBox() const
     return QRectF(left, top, atkWidth, atkHeight);
 }
 
-void Player::onHurt()
+void Player::onHurt(int damage, Entity* attacker)
 {
-    qDebug()<<"the player is onhurt hp:"<< stats.runtime.hp;
+    currentState = EntityState::Hurt;
+    qDebug()<<"the"<<myConfig.name <<"was hitted by"
+             <<attacker->getName()<<"damage is"<< damage <<"Remaining hp:"<< stats.runtime.hp;
 }
 
-void Player::onDeath()
+void Player::onDeath(int damage, Entity* attacker)
 {
-    qDebug()<<"the player is onDeath,the game is over";
+    currentState = EntityState::Dead;
+    qDebug()<<"the "<<myConfig.name<<"was"<< attacker->getName()<<"killed!"<< "the Fatal damage:"<<damage;
 }
 
 void Player::updateState()
 {
-    if(currentState == EntityState::Dead) return;
-    if(currentState == EntityState::Hurt)
-    {
-        if(hurtStunTimer <= 0.0)
-        {
-            currentState = isOnGround? currentState = EntityState::Idle: currentState = EntityState::Jump;
-        }
-        return;
-    }
-    if(isAttackPressed && currentState != EntityState::Attack)
-    {
-        currentState = EntityState::Attack;
-        return;
-    }
     switch(currentState)
     {
+    case EntityState::Dead:
+        return;
+        break;
+    case EntityState::Hurt:
+        if(hurtStunTimer <= 0)
+        {
+            currentState = isOnGround? currentState = EntityState::Idle: currentState = EntityState::Jump;
+        }else{
+            return;
+        }
+        break;
     case EntityState::Attack:
         if(animator.isFinshed())
         {
@@ -143,6 +149,11 @@ void Player::updateState()
         }
         break;
     case EntityState::Idle:
+        if(isAttackPressed && currentState != EntityState::Attack)
+        {
+            currentState = EntityState::Attack;
+            return;
+        }
         if(!isOnGround)
         {
             currentState = EntityState::Jump;
@@ -153,6 +164,11 @@ void Player::updateState()
         }
         break;
     case EntityState::Run:
+        if(isAttackPressed && currentState != EntityState::Attack)
+        {
+            currentState = EntityState::Attack;
+            return;
+        }
         if(!isOnGround)
         {
             currentState = EntityState::Jump;
@@ -163,6 +179,11 @@ void Player::updateState()
         }
         break;
     case EntityState::Jump:
+        if(isAttackPressed && currentState != EntityState::Attack)
+        {
+            currentState = EntityState::Attack;
+            return;
+        }
         if(isOnGround)
         {
             if(isLeftPressed || isRightPressed)

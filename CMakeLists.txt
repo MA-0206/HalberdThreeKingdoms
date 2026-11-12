@@ -20,7 +20,7 @@ qt_add_executable(HalberdThreeKingdoms
     assets/images/characters/liubei/liubei.qrc
     assets/images/ui/loading/start_background.qrc
     assets/images/maps/level_map/level_yellowscarf.qrc
-    src/entities/EntityState.h
+    src/entities/EntityData.h
     src/entities/entity.h src/entities/entity.cpp
     src/entities/player/player.h src/entities/player/player.cpp
     src/ui/hud/gamehud.h src/ui/hud/gamehud.cpp

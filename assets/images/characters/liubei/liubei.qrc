@@ -5,6 +5,8 @@
         <file alias="lb_run">liubei_run.png</file>
         <file alias="lb_attack">liubei_attack.png</file>
         <file alias="lb_avatar">liubei_avatar.png</file>
+        <file alias="lb_hurt">liubei_hurt.png</file>
+        <file alias="lb_dead">liubei_dead.png</file>
     </qresource>
     <qresource prefix="/new/prefix1"/>
 </RCC>

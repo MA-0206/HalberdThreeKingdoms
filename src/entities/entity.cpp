@@ -46,6 +46,7 @@ void Entity::updateAnimation()
     case EntityState::Idle:   animator.play("idle"); break;
     case EntityState::Run:    animator.play("run"); break;
     case EntityState::Jump:   animator.play("jump"); break;
+    case EntityState::Chase:  animator.play("chase"); break;
     case EntityState::Attack: animator.play("attack"); break;
     case EntityState::Hurt:   animator.play("hurt"); break;
     case EntityState::Dead:   animator.play("dead"); break;
@@ -75,6 +76,7 @@ void Entity::takeDamage(int damage, Entity* attacker)
 
     if(attacker)
     {
+        killer = attacker;
         if(x()> attacker->x())
         {
             knockbackSpeed = 100;
@@ -88,11 +90,9 @@ void Entity::takeDamage(int damage, Entity* attacker)
     {
         stats.runtime.hp = 0;
         m_isDead = true;
-        currentState = EntityState::Dead;
-        animator.play("dead");
+        onDeath(damage, attacker);
     }else{
-        currentState = EntityState::Hurt;
-        onHurt();
+        onHurt(damage, attacker);
     }
 }
 

@@ -144,7 +144,7 @@ void GameView::keyPressEvent(QKeyEvent* event)
         // qDebug()<<"is AttackPressed =true";
     }
     if(event->key()== Qt::Key_H)
-        world->getPlayer()->takeDamage(10);
+        world->getPlayer()->takeDamage(10, world->getPlayer());
     if(event->key()== Qt::Key_B)
         world->getPlayer()->heal(20);
 }

@@ -23,6 +23,10 @@ void World::update(qreal dt, bool left, bool right, bool jump, bool attack)
 
     for(Enemy* enemy:enemies)
     {
+        if(enemy->getTarget()== nullptr || enemy->getTarget()->isDead())
+        {
+            enemy->setTarget(player);
+        }
         enemy->tick(dt);
     }
     checkCombat();
@@ -36,7 +40,7 @@ void World::checkCombat()
         QRectF ackBox = player->getAttackBox();
         for(Enemy* enemy: enemies)
         {
-            if(ackBox.intersects(enemy->getHurtBox()))
+            if(canAttack(player->faction, enemy->faction) && ackBox.intersects(enemy->getHurtBox()))
             {
                 enemy->takeDamage(20, player);
             }
@@ -47,7 +51,7 @@ void World::checkCombat()
         if(enemy->isAttackActive())
         {
             QRectF ackBox = enemy->getAttackBox();
-            if(ackBox.intersects(player->getHurtBox()))
+            if(canAttack(enemy->faction, player->faction) && ackBox.intersects(player->getHurtBox()))
             {
                 player->takeDamage(10, enemy);
             }
@@ -62,6 +66,16 @@ void World::cleanUpDeadEnemies()
         Enemy* e = *it;
         if(e->canBeRemoved())
         {
+            if(e->killer != nullptr)
+            {
+                Player* p = dynamic_cast<Player*>(e->killer);
+                if(p)
+                {
+                    p->addExp(e->getExpReward());
+                    qDebug()<< "World:"<< p->getName()<< "killed"<< e->getName()
+                             << "acqure exp:"<< e->getExpReward();
+                }
+            }
             delete e;
             it = enemies.erase(it);
         }else{
