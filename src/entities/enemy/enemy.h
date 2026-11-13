@@ -9,7 +9,7 @@ struct EnemyConfig{
     int expReward = 650;
     qreal sightRange = 500.0;
     qreal attackRange = 80.0;
-    qreal attackCD   = 10.5;
+    qreal attackCD   = 3.5;
     qreal lostTargetWaitTime = 2.0;
     qreal runSpeed = 100.0;
     qreal chaseSpeed = 150.0;
@@ -49,10 +49,12 @@ private:
     const qreal waitDuration = 1.5;
 
     void loadEnemyAssets();
-    void initEnemy();
+    void initStats();
     void updatePatrol(qreal dt);
     void updateChase(qreal dt);
     void handleAction(qreal dt);
+    void handleEdgeWaitTimeout();
+    void handleLostWaitTimeout();
     bool hasValidTarget() const;
     bool isTargetInAttackRange() const;
     bool isTargetInSightRange() const;

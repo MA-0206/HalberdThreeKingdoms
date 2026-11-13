@@ -17,14 +17,14 @@ void Animator::addAnimation(const QString& name, const QPixmap& sheet, int total
     data.tickRate = tickRate;
     animations[name] = data;
 
-    qDebug()<<"sheet:"<<sheet;
-    qDebug()<<"totalFrames:"<<totalFrames;
-    qDebug()<<"rows:"<<rows;
-    qDebug()<<"cols:"<<cols;
-    qDebug()<<"frameWidth:"<<sheet.width()/cols;
-    qDebug()<<"frameHeight:"<<sheet.height()/rows;
-    qDebug()<<"tickRate:"<<tickRate;
-    qDebug()<<"sheet:"<<sheet;
+    // qDebug()<<"sheet:"<<sheet;
+    // qDebug()<<"totalFrames:"<<totalFrames;
+    // qDebug()<<"rows:"<<rows;
+    // qDebug()<<"cols:"<<cols;
+    // qDebug()<<"frameWidth:"<<sheet.width()/cols;
+    // qDebug()<<"frameHeight:"<<sheet.height()/rows;
+    // qDebug()<<"tickRate:"<<tickRate;
+    // qDebug()<<"sheet:"<<sheet;
 }
 
 // Play the animation

@@ -5,7 +5,7 @@ Enemy::Enemy(const EnemyConfig& config, QGraphicsItem* parent)
 {
     faction = Faction::Enemy;
     loadEnemyAssets();
-    initEnemy();
+    initStats();
 }
 
 void Enemy::update(qreal dt)
@@ -36,7 +36,7 @@ void Enemy::loadEnemyAssets()
     setPos(400, groundY);
 }
 
-void Enemy::initEnemy()
+void Enemy::initStats()
 {
     stats.base.maxHp = myConfig.maxHp;
 
@@ -49,6 +49,7 @@ void Enemy::handleAction(qreal dt)
 {
     if(currentState == EntityState::Idle)
     {
+        waitTimer += dt;
         if (!hasValidTarget() || !isTargetInSightRange())
         {
             lostTimer += dt;
@@ -80,6 +81,7 @@ void Enemy::setTarget(Entity* target)
 // The mechanism of small monsters' patrol
 void Enemy::updatePatrol(qreal dt)
 {
+    if(!isOnGround) return;
     // qDebug() << "正在巡逻... 速度:" << myConfig.runSpeed << " 当前位置:" << x() << " 方向:" << moveDirection;
     if(moveDirection == 1 && transform().m11() < 0)
     {
@@ -88,45 +90,50 @@ void Enemy::updatePatrol(qreal dt)
     {
         setTransform(QTransform::fromScale(-1,1));
     }
-    if(!isOnGround)
+
+    qreal moveDistance = myConfig.runSpeed * dt;
+    setX(x()+ (moveDistance * moveDirection));
+
+    qreal patrolMaxX = patrolCenterX + myConfig.patrolRange;
+    qreal patrolMinX = patrolCenterX - myConfig.patrolRange;
+
+    if(x()>= patrolMaxX && moveDirection == 1)
     {
-        return;
+        isWaitingAtEdge = true;
+    }else if(x()<= patrolMinX && moveDirection == -1)
+    {
+        isWaitingAtEdge = true;
     }
-    if(isWaitingAtEdge)
+}
+
+void Enemy::handleEdgeWaitTimeout()
+{
+    if(waitTimer >= waitDuration)
     {
-        waitTimer += dt;
-        if(waitTimer >= waitDuration)
+        isWaitingAtEdge = false;
+        waitTimer = 0;
+
+        moveDirection *= -1;
+        if(moveDirection == 1)
         {
-            isWaitingAtEdge = false;
-            waitTimer = 0;
-
-            moveDirection *= -1;
-
-            if(moveDirection == 1)
-            {
-                setTransform(QTransform());
-            }
-            else{
-                setTransform(QTransform::fromScale(-1, 1));
-            }
+            setTransform(QTransform());
+        }else{
+            setTransform(QTransform::fromScale(-1,1));
         }
-    }else
+        currentState = EntityState::Run;
+    }
+}
+
+void Enemy::handleLostWaitTimeout()
+{
+    if(lostTimer >= myConfig.lostTargetWaitTime)
     {
-        qreal moveDistance = myConfig.runSpeed * dt;
-        setX(x()+ (moveDistance * moveDirection));
+        currentState = EntityState::Run;
 
-        qreal patrolMaxX = patrolCenterX + myConfig.patrolRange;
-        qreal patrolMinX = patrolCenterX - myConfig.patrolRange;
-
-        if(x()>= patrolMaxX && moveDirection == 1)
-        {
-            isWaitingAtEdge = true;
-            waitTimer = 0.0;
-        }else if(x()<= patrolMinX && moveDirection == -1)
-        {
-            isWaitingAtEdge = true;
-            waitTimer = 0.0;
-        }
+        patrolCenterX = x();
+        isWaitingAtEdge = false;
+        moveDirection = -1;
+        lostTimer = 0;
     }
 }
 
@@ -232,7 +239,6 @@ void Enemy::updateState()
                 currentState = EntityState::Idle;
             }else{
                 currentState = EntityState::Chase;
-                lostTimer = 0.0;
             }
         }else{
             return;
@@ -246,6 +252,7 @@ void Enemy::updateState()
         return;
         break;
     case EntityState::Chase:
+        lostTimer = 0.0;
         if(isOnGround)
         {
             if(isTargetInSightRange())
@@ -256,9 +263,7 @@ void Enemy::updateState()
                         hitCoolTimer = myConfig.attackCD;
                 }
                 return;
-            }
-            else{
-                lostTimer = 0.0;
+            }else{
                 currentState = EntityState::Idle;
             }
         }else{
@@ -271,11 +276,9 @@ void Enemy::updateState()
             if(isTargetInSightRange())
             {
                 currentState = EntityState::Chase;
-                lostTimer = 0.0;
             }else if(!isWaitingAtEdge)
             {
                 currentState = EntityState::Run;
-                lostTimer = 0.0;
             }else{
                 currentState = EntityState::Idle;
             }
@@ -287,15 +290,13 @@ void Enemy::updateState()
             if(hasValidTarget() && isTargetInSightRange())
             {
                 currentState = EntityState::Chase;
-                lostTimer = 0.0;
                 break;
             }
-            if(lostTimer > myConfig.lostTargetWaitTime)
+            if(isWaitingAtEdge)
             {
-                    currentState = EntityState::Run;
-                    patrolCenterX = x();
-                    isWaitingAtEdge = false;
-                    lostTimer = 0.0;
+                handleEdgeWaitTimeout();
+            }else{
+                handleLostWaitTimeout();
             }
         }
         else{
@@ -303,12 +304,12 @@ void Enemy::updateState()
         }
         break;
     case EntityState::Run:
+        waitTimer = 0.0;
         if(isOnGround)
         {
             if(isTargetInSightRange())
             {
                 currentState = EntityState::Chase;
-                lostTimer = 0.0;
             }
             else if(isWaitingAtEdge)
             {

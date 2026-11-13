@@ -6,12 +6,13 @@
 
 struct CharacterConfig{
     QString name = "liubei";
-    int baseHp = 100;
-    int baseMp = 50;
-    int baseExp = 100;
-    int force = 30;
-    int hpGrowth = 100;
-    int mpGrowth = 50;
+    qreal baseHp = 100.0;
+    qreal baseMp = 50.0;
+    qreal baseExp = 100.0;
+    qreal force = 30.0;
+    qreal hpGrowth = 2.0;
+    qreal mpGrowth = 1.5;
+    qreal expGrowth = 1.2;
     qreal moveSpeed = 300.0;
     qreal jumpSpeed = -800.0;
 };
@@ -22,11 +23,9 @@ public:
     Player(CharacterConfig& config, QGraphicsItem* parent = nullptr);
 
     void update(qreal dt) override;
-    // bool isAttackActive() const override;
     bool isAttackActive() const override;
     QRectF getAttackBox() const override;
     void handleInput(bool left, bool right, bool jump, bool attack);
-    // void takeDamage(int damage);
     void heal(int amount);
     void replayMagic(int magic);
     void deleteMagic(int magic);
@@ -44,10 +43,14 @@ private:
     bool isRightPressed = false;
     bool isJumpPressed = false;
     bool isAttackPressed = false;
+    bool wasJumpPressed = false;
+    bool jumpTrigger = false;
 
     void loadPlayerAssets();
     void handleMove(qreal dt);
     void initStats();
+    void upgradeState();
+    void updateInputDebounce();
 };
 
 #endif // PLAYER_H

@@ -11,7 +11,7 @@ Player::Player(CharacterConfig& config, QGraphicsItem* parent):Entity(parent),my
 // Initialize character status
 void Player::initStats()
 {
-    stats.runtime.level = 1;
+    maxJumpCount = 2;
     stats.base.name   = myConfig.name;
     stats.base.maxHp  = myConfig.baseHp;
     stats.base.maxMp  = myConfig.baseMp;
@@ -20,8 +20,6 @@ void Player::initStats()
     stats.runtime.name = stats.base.name;
     stats.runtime.hp   = stats.base.maxHp;
     stats.runtime.mp   = stats.base.maxMp;
-    stats.runtime.exp  = 0;
-
 }
 
 // Load the sprite sheet and calculate the size
@@ -50,9 +48,22 @@ void Player::update(qreal dt)
         applyGravity(dt, false, 0);
         return;
     }
+    updateInputDebounce();
     handleMove(dt);
-    applyGravity(dt,isJumpPressed,-800);
+    applyGravity(dt,jumpTrigger,myConfig.jumpSpeed);
 
+}
+
+void Player::updateInputDebounce()
+{
+    if(isJumpPressed && !wasJumpPressed)
+    {
+        jumpTrigger = true;
+    }else
+    {
+        jumpTrigger = false;
+    }
+    wasJumpPressed = isJumpPressed;
 }
 
 void Player::handleInput(bool left, bool right, bool jump, bool attack)
@@ -227,16 +238,35 @@ void Player::deleteMagic(int magic)
 
 void Player::addExp(int exp)
 {
-    stats.runtime.exp += exp;
-    if(stats.runtime.exp > stats.base.maxExp)
+
+    if(stats.runtime.level >= stats.base.maxLevel)
     {
-        if(stats.runtime.level > stats.base.maxLevel)
-        {
-            stats.runtime.exp = stats.base.maxExp;
-            stats.runtime.level = stats.base.maxLevel;
-            return;
-        }
-        stats.runtime.exp -= stats.base.maxExp;
-        stats.runtime.level++;
+        stats.runtime.exp = stats.base.maxExp;
+        stats.runtime.level = stats.base.maxLevel;
+        return;
     }
+    stats.runtime.exp += exp;
+
+    while(stats.runtime.exp >= stats.base.maxExp)
+    {
+        stats.runtime.exp -= stats.base.maxExp;
+        ++stats.runtime.level;
+        upgradeState();
+    }
+
+    if(stats.runtime.level >= stats.base.maxLevel)
+    {
+        stats.runtime.level = stats.base.maxLevel;
+        stats.runtime.exp = stats.base.maxExp;
+    }
+}
+
+void Player::upgradeState()
+{
+    stats.base.maxHp = stats.base.maxHp * myConfig.hpGrowth;
+    stats.base.maxMp = stats.base.maxMp * myConfig.mpGrowth;
+    stats.base.maxExp = stats.base.maxExp * myConfig.expGrowth;
+
+    stats.runtime.hp = stats.base.maxHp;
+    stats.runtime.mp = stats.base.maxMp;
 }

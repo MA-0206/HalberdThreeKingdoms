@@ -22,10 +22,13 @@ void Entity::tick(qreal dt)
 // Gravity design for jumping and landing
 void Entity::applyGravity(qreal dt, bool jumpPressed, qreal jumpSpeed)
 {
-    if(jumpPressed && isOnGround)
+    if(jumpPressed && (isOnGround || jumpCount < maxJumpCount))
     {
+        speedY = 0.0;
         speedY = jumpSpeed;
         isOnGround = false;
+        jumpCount ++;
+        qDebug()<<"jumpCount:"<<jumpCount<<"maxJumpCount:"<<maxJumpCount;
     }
     speedY += gravity * dt;
     setY(y()+ speedY * dt);
@@ -35,6 +38,7 @@ void Entity::applyGravity(qreal dt, bool jumpPressed, qreal jumpSpeed)
         setY(groundY);
         speedY = 0.0;
         isOnGround = true;
+        jumpCount = 0;
     }
 }
 

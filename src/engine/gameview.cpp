@@ -146,7 +146,7 @@ void GameView::keyPressEvent(QKeyEvent* event)
     if(event->key()== Qt::Key_H)
         world->getPlayer()->takeDamage(10, world->getPlayer());
     if(event->key()== Qt::Key_B)
-        world->getPlayer()->heal(20);
+        world->getPlayer()->deleteMagic(20);
 }
 
 void GameView::keyReleaseEvent(QKeyEvent* event)

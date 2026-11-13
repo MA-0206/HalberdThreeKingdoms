@@ -24,7 +24,7 @@ struct BaseAttributes {
     int maxHp = 1;
     int maxMp = 1;
     int maxExp = 1;
-    int maxLevel = 1;
+    int maxLevel = 10;
 };
 
 struct RunTimeState {

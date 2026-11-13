@@ -45,6 +45,8 @@ protected:
     EntityState currentState = EntityState::Idle;
     int frameWidth = 0;
     int frameHeight = 0;
+    int jumpCount = 0;
+    int maxJumpCount = 1;
     qreal speedY = 0.0;
     qreal gravity = 2000.0;
     qreal groundY = 650.0;
