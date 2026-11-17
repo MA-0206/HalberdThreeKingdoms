@@ -64,8 +64,8 @@ void Entity::updateAnimation()
         setPixmap(currentPix);
     }
 
-    updateDebugHurt();
-    updateDebugAttack();
+    // updateDebugHurt();
+    // updateDebugAttack();
 }
 
 void Entity::takeDamage(int damage, Entity* attacker)

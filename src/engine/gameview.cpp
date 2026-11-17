@@ -79,11 +79,6 @@ void GameView::initWorld()
     scene->addItem(world->getPlayer());
     view->centerOn(world->getPlayer());
 
-    Enemy* e1 = world->spawnTestEnemy(500,650);
-    scene->addItem(e1);
-
-    Enemy* e2 = world->spawnTestEnemy(700,650);
-    scene->addItem(e2);
     gameHud = new GameHud(this);
     initGameHud();
     gameHud->setAvatar(":/assets/images/characters/liubei/lb_avatar");
@@ -95,14 +90,20 @@ void GameView::upDateGame()
     {
         isLeftPressed = false;
         isRightPressed = false;
-        // return;
     }
     qreal dt = frameTimer.restart()/1000.0;
     if(dt > 0.05)
     {
         dt = 0.05;
     }
+
     world->update(dt, isLeftPressed, isRightPressed, isJumpPressed, isAttackPressed);
+    auto& newEnemies = world->getPendingEnemies();
+    for(Enemy* e:newEnemies)
+    {
+        scene->addItem(e);
+    }
+    world->clearPendingEnemies();
     updateCamera();
     gameHud->updateStats(world->getPlayer()->getStats());
 }
@@ -118,7 +119,23 @@ void GameView::initGameHud()
 
 void GameView::updateCamera()
 {
-    view->centerOn(world->getPlayer());
+    qreal targetX = world->getPlayer()->x();
+    qreal halfSceen = view->width()/2;
+
+    qreal camMinX = world->getCameraMinX();
+    qreal camMaxX = world->getCameraMaxX();
+
+    qreal minCenter = camMinX + halfSceen;
+    qreal maxCenter = camMaxX - halfSceen;
+
+    if(minCenter > maxCenter)
+    {
+        targetX = (minCenter + maxCenter)/2.0;
+    }else{
+        targetX = std::clamp(targetX, minCenter, maxCenter);
+    }
+
+    view->centerOn(targetX, world->getPlayer()->y());
 }
 
 void GameView::keyPressEvent(QKeyEvent* event)

@@ -1,4 +1,5 @@
 #include "player.h"
+#include <algorithm>
 
 Player::Player(CharacterConfig& config, QGraphicsItem* parent):Entity(parent),myConfig(config)
 {
@@ -38,7 +39,7 @@ void Player::loadPlayerAssets()
     frameWidth = animator.getFrameWidth();
     frameHeight = animator.getFrameHeight();
     setOffset(-frameWidth/2.0, -frameHeight);
-    setPos(500,650);
+    setPos(50,450);
 }
 
 void Player::update(qreal dt)
@@ -89,6 +90,15 @@ void Player::handleMove(qreal dt)
     {
         setX(x()- moveDistance);
         setTransform(QTransform::fromScale(-1,1));
+    }
+    qreal halfWidth = animator.getFrameWidth()/2;
+    if(x() - halfWidth < minXBound)
+    {
+    setX(minXBound + halfWidth);
+    }
+    if(x() + halfWidth > maxXBound)
+    {
+        setX(maxXBound - halfWidth);
     }
 }
 

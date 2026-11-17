@@ -5,8 +5,8 @@
 
 struct EnemyConfig{
     QString name = "yellowscarf";
-    int maxHp = 200;
-    int expReward = 650;
+    int maxHp = 20;
+    int expReward = 60;
     qreal sightRange = 500.0;
     qreal attackRange = 80.0;
     qreal attackCD   = 3.5;

@@ -1,4 +1,5 @@
 #include "enemy.h"
+#include <algorithm>
 
 Enemy::Enemy(const EnemyConfig& config, QGraphicsItem* parent)
     :Entity(parent),myConfig(config)
@@ -38,8 +39,10 @@ void Enemy::loadEnemyAssets()
 
 void Enemy::initStats()
 {
+    stats.base.name = myConfig.name;
     stats.base.maxHp = myConfig.maxHp;
 
+    stats.runtime.name = stats.base.name;
     stats.runtime.hp = stats.base.maxHp;
 
     patrolCenterX = x();
@@ -66,6 +69,15 @@ void Enemy::handleAction(qreal dt)
     if(currentState == EntityState::Run)
     {
         updatePatrol(dt);
+    }
+    qreal halfWidth = animator.getFrameWidth()/2;
+    if(x() - halfWidth < minXBound)
+    {
+    setX(minXBound + halfWidth);
+    }
+    if(x() + halfWidth > maxXBound)
+    {
+        setX(maxXBound - halfWidth);
     }
 }
 

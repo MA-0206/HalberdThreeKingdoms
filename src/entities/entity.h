@@ -11,6 +11,9 @@ public:
     Entity(QGraphicsItem* parents = nullptr);
     virtual ~Entity() = default;
 
+    qreal minXBound = 0.0;
+    qreal maxXBound = 99999.0;
+
     Entity* killer;
     Faction faction = Faction::Neutral;
 
