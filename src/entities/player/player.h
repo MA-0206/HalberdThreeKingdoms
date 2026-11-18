@@ -3,18 +3,19 @@
 
 #include <entity.h>
 
-
 struct CharacterConfig{
-    QString name = "liubei";
-    qreal baseHp = 100.0;
-    qreal baseMp = 50.0;
-    qreal baseExp = 100.0;
-    qreal force = 30.0;
-    qreal hpGrowth = 2.0;
-    qreal mpGrowth = 1.5;
-    qreal expGrowth = 1.2;
-    qreal moveSpeed = 300.0;
-    qreal jumpSpeed = -800.0;
+    QString name;
+    qreal baseHp;
+    qreal baseMp;
+    qreal baseExp;
+    qreal hpGrowth;
+    qreal hpRegenPerSec;
+    qreal mpGrowth;
+    qreal expGrowth;
+    qreal moveSpeed;
+    qreal jumpSpeed;
+    int baseAttack;
+    int attackGrowth;
 };
 
 class Player : public Entity

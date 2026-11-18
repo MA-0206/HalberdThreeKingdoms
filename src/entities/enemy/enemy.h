@@ -4,18 +4,18 @@
 #include <entity.h>
 
 struct EnemyConfig{
-    QString name = "yellowscarf";
-    int maxHp = 20;
-    int expReward = 60;
-    qreal sightRange = 500.0;
-    qreal attackRange = 80.0;
-    qreal attackCD   = 3.5;
-    qreal lostTargetWaitTime = 2.0;
-    qreal runSpeed = 100.0;
-    qreal chaseSpeed = 150.0;
-    qreal patrolRange = 400.0;
-    qreal patrolMinX = 500.0;
-    qreal patrolMaxX = 800.0;
+    QString name;
+    int maxHp;
+    int expReward;
+    qreal sightRange;
+    qreal attackRange;
+    qreal attackCD;
+    qreal lostTargetWaitTime;
+    qreal runSpeed;
+    qreal chaseSpeed;
+    qreal patrolRange;
+    qreal patrolMinX;
+    qreal patrolMaxX;
 };
 
 class Enemy : public Entity

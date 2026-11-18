@@ -58,6 +58,7 @@ private:
     qreal m_cameraMaxX = 5000.0;
     qreal m_maxReachedX = 0.0;
 
+    void initPlayer();
     void initBattleZone();
     void updateBattleZone(qreal dt);
     void checkZoneTrigger();

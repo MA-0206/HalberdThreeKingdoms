@@ -1,10 +1,9 @@
 #include "world.h"
-
+#include "jsonparser.h"
 
 World::World()
 {
-    CharacterConfig liubeiConfig;
-    player = new Player(liubeiConfig);
+    initPlayer();
     initBattleZone();
 }
 
@@ -15,6 +14,12 @@ World::~World()
         delete e;
     }
     enemies.clear();
+}
+
+void World::initPlayer()
+{
+    CharacterConfig liubeiConfig = JsonParser::getInstance().getCharacterConfig("liubei");
+    player = new Player(liubeiConfig);
 }
 
 void World::update(qreal dt, bool left, bool right, bool jump, bool attack)
@@ -216,7 +221,7 @@ void World::preventRollback()
 // Generate a mini-monster
 Enemy* World::spawnTestEnemy(qreal x, qreal y)
 {
-    EnemyConfig enemyConfig;
+    EnemyConfig enemyConfig = JsonParser::getInstance().getEnemyConfig("yellowscarf");
     Enemy* newEnemy = new Enemy(enemyConfig);
     newEnemy->setPos(x,y - 200);
     newEnemy->minXBound = m_zone.lockLeftX;

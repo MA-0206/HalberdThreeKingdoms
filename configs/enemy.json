@@ -1,0 +1,16 @@
+{
+    "yellowscarf":{
+        "name":"yellowscarf",
+        "maxHp":20,
+        "expReward":  60,
+        "sightRange":  500.0,
+        "attackRange":  80.0,
+        "attackCD" :   3.5,
+        "lostTargetWaitTime":  2.0,
+        "runSpeed": 100.0,
+        "chaseSpeed":  150.0,
+        "patrolRange":  400.0,
+        "patrolMinX":  500.0,
+        "patrolMaxX":  800.0
+    }
+}

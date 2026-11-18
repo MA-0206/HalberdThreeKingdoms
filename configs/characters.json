@@ -1,0 +1,30 @@
+{
+    "liubei":{
+        "name":"liubei",
+        "baseHp":100,
+        "baseMp":50,
+        "baseExp":100,
+        "baseAttack":15,
+        "hpGrowth": 1.5,
+        "attackGrowth": 10,
+        "hpRegenPerSec": 2.0,
+        "mpGrowth": 1.2,
+        "expGrowth": 1.5,
+        "moveSpeed": 300.0,
+        "jumpSpeed": -800.0
+    },
+    "guanyu":{
+        "name":"guanyu",
+        "baseHp":120,
+        "baseMp":40,
+        "baseExp":100,
+        "baseAttack":20,
+        "hpGrowth": 1.6,
+        "attackGrowth": 12,
+        "hpRegenPerSec": 2.0,
+        "mpGrowth": 1.1,
+        "expGrowth": 1.5,
+        "moveSpeed": 280.0,
+        "jumpSpeed": -750.0
+    }
+}

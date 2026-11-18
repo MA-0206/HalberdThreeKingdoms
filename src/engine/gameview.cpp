@@ -1,4 +1,5 @@
 #include "gameview.h"
+#include "jsonparser.h"
 #include <QMessageBox>
 #include <qevent.h>
 
@@ -18,6 +19,7 @@ void GameView::init()
         QMessageBox::critical(this,"ERROR","the map sources is loading failed!");
         return;
     }
+    JsonParser::getInstance().loadAllConfigs();
     initWorld();
 }
 

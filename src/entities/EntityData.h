@@ -25,6 +25,8 @@ struct BaseAttributes {
     int maxMp = 1;
     int maxExp = 1;
     int maxLevel = 10;
+    int attack = 10;
+    qreal hpRegenPerSec = 0.0;
 };
 
 struct RunTimeState {

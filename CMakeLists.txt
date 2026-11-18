@@ -27,6 +27,7 @@ qt_add_executable(HalberdThreeKingdoms
     src/entities/enemy/enemy.h src/entities/enemy/enemy.cpp
     assets/images/enemies/soldier/yellowscarf/yellowscarf.qrc
     src/world/world.h src/world/world.cpp
+    src/core/jsonparser.h src/core/jsonparser.cpp
 )
 
 target_link_libraries(HalberdThreeKingdoms
@@ -37,6 +38,7 @@ target_link_libraries(HalberdThreeKingdoms
 
 target_include_directories(HalberdThreeKingdoms PRIVATE
     src
+    src/third_party
     src/engine
     src/entities
     src/entities/player
@@ -45,6 +47,7 @@ target_include_directories(HalberdThreeKingdoms PRIVATE
     src/ui/screens
     src/ui/hud
     src/world
+    src/core
 )
 
 install(TARGETS HalberdThreeKingdoms
@@ -59,3 +62,9 @@ qt_generate_deploy_app_script(
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
+
+add_custom_command(TARGET HalberdThreeKingdoms POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/configs
+    $<TARGET_FILE_DIR:HalberdThreeKingdoms>/configs
+)
