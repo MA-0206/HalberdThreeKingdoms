@@ -3,6 +3,63 @@
 #include <fstream>
 #include <QDebug>
 
+void JsonParser::loadLevel(const QString& levelName, qreal& outMapWidth,
+                           qreal& outMapHeight, std::vector<BattleZone>& outZones)
+{
+    std::ifstream file(LEVEL_PATH + levelName.toStdString() + ".json");
+    if(!file.is_open())
+    {
+        qDebug()<< "the level:" << levelName << "load path open failed";
+        return;
+    }
+    nlohmann::json j;
+    file >> j;
+
+    outMapWidth  = j.value<qreal>("mapWidth",4000.0);
+    outMapHeight = j.value<qreal>("mapHeight",400.0);
+
+    outZones.clear();
+    if(j.contains("zones") && j["zones"].is_array())
+    {
+        for(const auto& zonejson : j["zones"])
+        {
+            BattleZone zone;
+            zone.lockLeftX = zonejson.value<qreal>("lockLeftX",0.0);
+            zone.lockRightX = zonejson.value<qreal>("lockRightX",outMapWidth);
+            qreal triggerX = zonejson.value<qreal>("triggerX",0.0);
+            zone.triggerBox = QRectF(triggerX, 0, 50, outMapHeight);
+
+            zone.isTriggered = false;
+            zone.isCleared = false;
+            zone.currentWaveIndex = 0;
+            zone.waveTimer = 0.0;
+            zone.waveIntervalTimer = 0.0;
+
+            if(zonejson.contains("waves") && zonejson["waves"].is_array())
+            {
+                for(const auto& wavejson : zonejson["waves"])
+                {
+                    WaveConfig wave;
+                    for(const auto& spawnjson : wavejson)
+                    {
+                        SpawnPoint sp;
+                        sp.x = spawnjson.value<qreal>("x", 0.0);
+                        sp.y = spawnjson.value<qreal>("y", 0.0);
+                        sp.delay = spawnjson.value<qreal>("delay",0.0);
+                        sp.hasSpawned = false;
+
+                        wave.spawnPoints.push_back(sp);
+                    }
+                    zone.waves.push_back(wave);
+                }
+            }
+            outZones.push_back(zone);
+        }
+    }
+    qDebug()<<"level:" << levelName << "is load successed! the fight area has:"<< outZones.size() ;
+}
+
+
 void JsonParser::loadAllConfigs()
 {
     parserCharacterConfig();
@@ -23,18 +80,18 @@ void JsonParser::parserCharacterConfig()
     for(auto& [key,value]: j.items())
     {
         CharacterConfig config;
-        config.name = QString::fromStdString(value["name"].get<std::string>());
-        config.baseHp = value["baseHp"].get<int>();
-        config.baseMp = value["baseMp"].get<int>();
-        config.baseExp = value["baseExp"].get<int>();
-        config.baseAttack = value["baseAttack"].get<int>();
-        config.hpGrowth = value["hpGrowth"].get<qreal>();
-        config.attackGrowth = value["attackGrowth"].get<qreal>();
-        config.hpRegenPerSec = value["hpRegenPerSec"].get<qreal>();
-        config.mpGrowth = value["mpGrowth"].get<qreal>();
-        config.expGrowth = value["expGrowth"].get<qreal>();
-        config.moveSpeed = value["moveSpeed"].get<qreal>();
-        config.jumpSpeed = value["jumpSpeed"].get<qreal>();
+        config.name = QString::fromStdString(value.value<std::string>("name","unkown"));
+        config.baseHp = value.value<int>("baseHp",0);
+        config.baseMp = value.value<int>("baseMp",0);
+        config.baseExp = value.value<int>("baseExp",0);
+        config.baseAttack = value.value<int>("baseAttack",0);
+        config.hpGrowth = value.value<qreal>("hpGrowth",0.0);
+        config.attackGrowth = value.value<qreal>("attackGrowth",0.0);
+        config.hpRegenPerSec = value.value<qreal>("hpRegenPerSec",0.0);
+        config.mpGrowth = value.value<qreal>("mpGrowth",0.0);
+        config.expGrowth = value.value<qreal>("expGrowth",0.0);
+        config.moveSpeed = value.value<qreal>("moveSpeed",0.0);
+        config.jumpSpeed = value.value<qreal>("jumpSpeed",0.0);
 
         m_characters[key] = std::move(config);
         qDebug()<< "parserCharacterConfig is successed:" << QString::fromStdString(key);
@@ -55,18 +112,18 @@ void JsonParser::parserEnemyConfig()
     for(auto& [key,value]:j.items())
     {
         EnemyConfig config;
-        config.name = QString::fromStdString(value["name"].get<std::string>());
-        config.maxHp = value["maxHp"].get<int>();
-        config.expReward = value["expReward"].get<int>();
-        config.sightRange = value["sightRange"].get<qreal>();
-        config.attackRange = value["attackRange"].get<qreal>();
-        config.attackCD = value["attackCD"].get<qreal>();
-        config.lostTargetWaitTime = value["lostTargetWaitTime"].get<qreal>();
-        config.runSpeed = value["runSpeed"].get<qreal>();
-        config.chaseSpeed = value["chaseSpeed"].get<qreal>();
-        config.patrolRange = value["patrolRange"].get<qreal>();
-        config.patrolMinX = value["patrolMinX"].get<qreal>();
-        config.patrolMaxX = value["patrolMaxX"].get<qreal>();
+        config.name = QString::fromStdString(value.value<std::string>("name","unkown"));
+        config.maxHp = value.value<int>("maxHp",0.0);
+        config.expReward = value.value<int>("expReward",0.0);
+        config.sightRange = value.value<qreal>("sightRange",0.0);
+        config.attackRange = value.value<qreal>("attackRange",0.0);
+        config.attackCD = value.value<qreal>("attackCD",0.0);
+        config.lostTargetWaitTime = value.value<qreal>("lostTargetWaitTime",0.0);
+        config.runSpeed = value.value<qreal>("runSpeed",0.0);
+        config.chaseSpeed = value.value<qreal>("chaseSpeed",0.0);
+        config.patrolRange = value.value<qreal>("patrolRange",0.0);
+        config.patrolMinX = value.value<qreal>("patrolMinX",0.0);
+        config.patrolMaxX = value.value<qreal>("patrolMaxX",0.0);
 
         m_enemies[key] = std::move(config);
         qDebug()<<"parseEnemyConfig is successed:" << QString::fromStdString(key);

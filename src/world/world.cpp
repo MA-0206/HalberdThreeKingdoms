@@ -94,31 +94,33 @@ void World::cleanUpDeadEnemies()
 
 void World::initBattleZone()
 {
+    qDebug()<<"the initbattleZone is start";
     m_maxReachedX = player->x();
-    m_zone.triggerBox = QRectF(1200, 0, 50, 720);
-    m_zone.lockLeftX = 500;
-    m_zone.lockRightX = 2200;
+    JsonParser::getInstance().loadLevel("level_1", m_mapTotalWidth, m_mapTotalHeight, m_battleZones);
+    // m_zone.triggerBox = QRectF(1200, 0, 50, 720);
+    // m_zone.lockLeftX = 500;
+    // m_zone.lockRightX = 2200;
 
-    WaveConfig wave1;
-    wave1.spawnPoints.push_back({1100.0,650.0 ,0.0, false});
-    wave1.spawnPoints.push_back({2000.0, 650.0, 0.5, false});
-    m_zone.waves.push_back(wave1);
+    // WaveConfig wave1;
+    // wave1.spawnPoints.push_back({1100.0,650.0 ,0.0, false});
+    // wave1.spawnPoints.push_back({2000.0, 650.0, 0.5, false});
+    // m_zone.waves.push_back(wave1);
 
-    WaveConfig wave2;
-    wave2.spawnPoints.push_back({1100.0, 650.0, 0.0, false});
-    wave2.spawnPoints.push_back({1150.0,650.0, 0.5,false});
-    wave2.spawnPoints.push_back({2000.0, 650.0, 0.0, false});
-    wave2.spawnPoints.push_back({2050.0, 650.0,0.0, false});
-    m_zone.waves.push_back(wave2);
+    // WaveConfig wave2;
+    // wave2.spawnPoints.push_back({1100.0, 650.0, 0.0, false});
+    // wave2.spawnPoints.push_back({1150.0,650.0, 0.5,false});
+    // wave2.spawnPoints.push_back({2000.0, 650.0, 0.0, false});
+    // wave2.spawnPoints.push_back({2050.0, 650.0,0.0, false});
+    // m_zone.waves.push_back(wave2);
 }
 
 void World::updateBattleZone(qreal dt)
 {
     checkZoneTrigger();
-    if(!m_zone.isTriggered || m_zone.isCleared) return;
-    if(m_zone.waveIntervalTimer > 0.0)
+    if(!m_battleZones[m_currentZoneIndex].isTriggered || m_battleZones[m_currentZoneIndex].isCleared) return;
+    if(m_battleZones[m_currentZoneIndex].waveIntervalTimer > 0.0)
     {
-        m_zone.waveIntervalTimer -= dt;
+        m_battleZones[m_currentZoneIndex].waveIntervalTimer -= dt;
         return;
     }
     updateWaveSpawning(dt);
@@ -127,21 +129,23 @@ void World::updateBattleZone(qreal dt)
 
 void World::checkZoneTrigger()
 {
-    if(m_zone.isTriggered) return;
-    if(player->getHurtBox().intersects(m_zone.triggerBox))
+    int nextZoneIndex = m_currentZoneIndex +1;
+    if(nextZoneIndex >= m_battleZones.size()) return;
+    if(player->getHurtBox().intersects(m_battleZones[nextZoneIndex].triggerBox))
     {
-        m_zone.isTriggered = true;
+        m_currentZoneIndex = nextZoneIndex;
+        m_battleZones[nextZoneIndex].isTriggered = true;
 
-        player->minXBound = m_zone.lockLeftX;
-        player->maxXBound = m_zone.lockRightX;
+        player->minXBound = m_battleZones[nextZoneIndex].lockLeftX;
+        player->maxXBound = m_battleZones[nextZoneIndex].lockRightX;
 
-        m_cameraMinX = m_zone.lockLeftX;
-        m_cameraMaxX = m_zone.lockRightX;
+        m_cameraMinX = m_battleZones[nextZoneIndex].lockLeftX;;
+        m_cameraMaxX = m_battleZones[nextZoneIndex].lockRightX;
 
         for(Enemy* e:enemies)
         {
-            e->minXBound = m_zone.lockLeftX;
-            e->maxXBound = m_zone.lockRightX;
+            e->minXBound = m_battleZones[nextZoneIndex].lockLeftX;;
+            e->maxXBound = m_battleZones[nextZoneIndex].lockRightX;
         }
         qDebug()<<"Start fight!";
     }
@@ -149,6 +153,12 @@ void World::checkZoneTrigger()
 
 void World::updateWaveSpawning(qreal dt)
 {
+    if(m_currentZoneIndex < 0 || m_currentZoneIndex >= m_battleZones.size())
+    {
+        qDebug()<<"updateWaveSpawning:the m_currentZoneIndex is invalied";
+        return;
+    }
+    BattleZone& m_zone = m_battleZones[m_currentZoneIndex];
     if(m_zone.currentWaveIndex >= m_zone.waves.size()) return;
     m_zone.waveTimer += dt;
 
@@ -165,6 +175,12 @@ void World::updateWaveSpawning(qreal dt)
 
 void World::checkWaveCleared()
 {
+    if(m_currentZoneIndex < 0 || m_currentZoneIndex >= m_battleZones.size())
+    {
+        qDebug() << "checkWaveCleared:the m_currentZoneIndex is invalied";
+        return;
+    }
+    BattleZone& m_zone = m_battleZones[m_currentZoneIndex];
     if(m_zone.currentWaveIndex >= m_zone.waves.size()) return;
     WaveConfig& currentWave = m_zone.waves[m_zone.currentWaveIndex];
     bool allSpawned = true;
@@ -206,13 +222,13 @@ void World::checkWaveCleared()
 
 void World::preventRollback()
 {
-    if(!m_zone.isTriggered || m_zone.isCleared)
+    if(m_currentZoneIndex < 0 || m_battleZones[m_currentZoneIndex].isCleared)
     {
         if(player->x() > m_maxReachedX)
         {
             m_maxReachedX = player->x();
         }
-        qreal newLeftBound = m_maxReachedX - 700.0;
+        qreal newLeftBound = m_maxReachedX - 640.0;
         player->minXBound = std::max(newLeftBound,0.0);
         m_cameraMinX = std::max(newLeftBound,0.0);
     }
@@ -224,8 +240,8 @@ Enemy* World::spawnTestEnemy(qreal x, qreal y)
     EnemyConfig enemyConfig = JsonParser::getInstance().getEnemyConfig("yellowscarf");
     Enemy* newEnemy = new Enemy(enemyConfig);
     newEnemy->setPos(x,y - 200);
-    newEnemy->minXBound = m_zone.lockLeftX;
-    newEnemy->maxXBound = m_zone.lockRightX;
+    newEnemy->minXBound = m_battleZones[m_currentZoneIndex].lockLeftX;
+    newEnemy->maxXBound = m_battleZones[m_currentZoneIndex].lockRightX;
     enemies.push_back(newEnemy);
     pendingEnemies.push_back(newEnemy);
     return newEnemy;

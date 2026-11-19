@@ -23,10 +23,10 @@ struct BattleZone {
 
     std::vector<WaveConfig> waves;
 
-    int currentWaveIndex = 0;
-    qreal waveTimer = 0.0;
     bool isTriggered = false;
     bool isCleared = false;
+    int currentWaveIndex = 0;
+    qreal waveTimer = 0.0;
     qreal waveIntervalTimer = 0.0;
 };
 
@@ -51,8 +51,11 @@ private:
     std::vector<Enemy*> enemies;
     std::vector<Enemy*> pendingEnemies;
 
-    BattleZone m_zone;
-    qreal m_mapTotalWidth = 5000.0;
+    std::vector<BattleZone> m_battleZones;
+    int m_currentZoneIndex = -1;
+
+    qreal m_mapTotalWidth = 1000.0;
+    qreal m_mapTotalHeight = 0.0;
 
     qreal m_cameraMinX = 0.0;;
     qreal m_cameraMaxX = 5000.0;

@@ -106,7 +106,7 @@ void GameView::upDateGame()
         scene->addItem(e);
     }
     world->clearPendingEnemies();
-    updateCamera();
+    updateCamera(dt);
     gameHud->updateStats(world->getPlayer()->getStats());
 }
 
@@ -119,16 +119,16 @@ void GameView::initGameHud()
     gameHud->updateStats(world->getPlayer()->getStats());
 }
 
-void GameView::updateCamera()
+void GameView::updateCamera(qreal dt)
 {
     qreal targetX = world->getPlayer()->x();
-    qreal halfSceen = view->width()/2;
+    qreal halfScreen = view->width()/2;
 
     qreal camMinX = world->getCameraMinX();
     qreal camMaxX = world->getCameraMaxX();
 
-    qreal minCenter = camMinX + halfSceen;
-    qreal maxCenter = camMaxX - halfSceen;
+    qreal minCenter = camMinX + halfScreen;
+    qreal maxCenter = camMaxX - halfScreen;
 
     if(minCenter > maxCenter)
     {

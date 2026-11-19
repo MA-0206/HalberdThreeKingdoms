@@ -53,7 +53,7 @@ private:
 
     void createPlayerItem();
     void upDateGame();
-    void updateCamera();
+    void updateCamera(qreal dt);
 };
 
 #endif // GAMEVIEW_H

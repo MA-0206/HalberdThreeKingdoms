@@ -28,7 +28,7 @@ void Entity::applyGravity(qreal dt, bool jumpPressed, qreal jumpSpeed)
         speedY = jumpSpeed;
         isOnGround = false;
         jumpCount ++;
-        qDebug()<<"jumpCount:"<<jumpCount<<"maxJumpCount:"<<maxJumpCount;
+        // qDebug()<<"jumpCount:"<<jumpCount<<"maxJumpCount:"<<maxJumpCount;
     }
     speedY += gravity * dt;
     setY(y()+ speedY * dt);
