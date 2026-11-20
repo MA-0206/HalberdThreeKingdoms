@@ -3,24 +3,26 @@
 #include <QMessageBox>
 #include <qevent.h>
 
-GameView::GameView(QWidget *parent): QWidget{parent}
+GameView::GameView(const QString& characterId, const QString& levelId,
+                   QWidget *parent): QWidget{parent}, m_levelId(levelId)
 {
-    init();
+    init(characterId, levelId);
+
 }
 
-void GameView::init()
+void GameView::init(const QString& characterId, const QString& levelId)
 {
+    JsonParser::getInstance().loadAllConfigs();
     this->setAttribute(Qt::WA_InputMethodEnabled,false);
     initSystems();
     initViewAppearance();
     initLayout();
+    initWorld(characterId,levelId);
     if(initLevel() == false)
     {
         QMessageBox::critical(this,"ERROR","the map sources is loading failed!");
         return;
     }
-    JsonParser::getInstance().loadAllConfigs();
-    initWorld();
 }
 
 // Initialization interface resources
@@ -59,10 +61,16 @@ void GameView::initLayout()
 // Turn the image into a physical object on stage
 bool GameView::initLevel()
 {
-    QPixmap mapPixmap(":/assets/images/maps/level_map/level_one");
+    QString mapPath = world->getLevelMapPath();
+    if(mapPath.isEmpty())
+    {
+        qDebug()<<"the levelMapPath is error,please check the level map path";
+        return false;
+    }
+    QPixmap mapPixmap(mapPath);
     if(mapPixmap.isNull())
     {
-        qDebug()<<"the level_one map upload is failed";
+        qDebug()<<"the level map image is loading failed";
         return false;
     }
 
@@ -75,9 +83,9 @@ bool GameView::initLevel()
 }
 
 // Initialize the world and render
-void GameView::initWorld()
+void GameView::initWorld(const QString& characterId, const QString& levelId)
 {
-    world = new World();
+    world = new World(characterId, levelId);
     scene->addItem(world->getPlayer());
     view->centerOn(world->getPlayer());
 

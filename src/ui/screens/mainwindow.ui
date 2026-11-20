@@ -2,30 +2,166 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1177</width>
+    <height>724</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButtonStartGame">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>480</y>
-      <width>271</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>开始游戏</string>
-    </property>
-   </widget>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="styleSheet">
+       <string notr="true">#page_mainMenu {border-image: url(:assets/images/ui/loading/start_background); }</string>
+      </property>
+      <widget class="QWidget" name="page_mainMenu">
+       <widget class="QPushButton" name="btn_startGame">
+        <property name="geometry">
+         <rect>
+          <x>530</x>
+          <y>530</y>
+          <width>181</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
+    border:none;
+    background:transparent;
+    icon:url(:/assets/images/ui/buttons/startGame);
+    icon-size:180px 80px;
+}
+QPushButton:hover{
+    border:2px solid #ffdd44;
+    box-shadow:0 0 12px #ffdd44;
+    icon-size:190px 86px;
+}
+QPushButton:pressed{
+    border:none;
+    box-shadow:none;
+    icon-size:170px 74px;
+}</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_selectRole">
+       <property name="styleSheet">
+        <string notr="true">#page_selectRole{border-image:url(:assets/images/ui/loading/secR_bcGrd);}</string>
+       </property>
+       <widget class="QPushButton" name="btn_liubei">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>0</y>
+          <width>311</width>
+          <height>671</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+		border: none;
+		background: transparent;
+		color: white;
+		font-size: 24px;
+}
+
+QPushButton: hover{
+		border: 2px solid yellow;
+}</string>
+        </property>
+        <property name="text">
+         <string>liubei</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_cofirmRole">
+        <property name="geometry">
+         <rect>
+          <x>950</x>
+          <y>580</y>
+          <width>231</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>comfirm</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_guanyu">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>0</y>
+          <width>321</width>
+          <height>661</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+		border: none;
+		background: transparent;
+		font-size: 24px;
+		color:white;
+}
+
+QPushButton:hover {
+		border: 2px solid yellow ;
+}</string>
+        </property>
+        <property name="text">
+         <string>guanyu</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_worldMap">
+       <property name="styleSheet">
+        <string notr="true">#page_worldMap {border-image: url(:/assets/images/ui/loading/worldMap);}</string>
+       </property>
+       <widget class="QPushButton" name="btn_level1">
+        <property name="geometry">
+         <rect>
+          <x>510</x>
+          <y>490</y>
+          <width>181</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>firstLevel</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_backToMain">
+        <property name="geometry">
+         <rect>
+          <x>1010</x>
+          <y>610</y>
+          <width>161</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>return</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1279</width>
+     <width>1177</width>
      <height>25</height>
     </rect>
    </property>

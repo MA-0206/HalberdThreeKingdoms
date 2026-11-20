@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/assets/images/ui/buttons">
+        <file alias="startGame">start_game.png</file>
+    </qresource>
+</RCC>

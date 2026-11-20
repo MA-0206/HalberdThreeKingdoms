@@ -16,7 +16,8 @@ class GameView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GameView(QWidget *parent = nullptr);
+    explicit GameView(const QString& characterId, const QString& levelId,
+                      QWidget *parent = nullptr);QString m_levelId;
 
 protected:
     void keyPressEvent(QKeyEvent* event)override;
@@ -32,12 +33,12 @@ private:
     QVBoxLayout* layout;
     QTimer* gameTimer;
 
-    void init();
+    void init(const QString& characterId, const QString& levelId);
     void initSystems();
     void initViewAppearance();
     void initLayout();
     bool initLevel();
-    void initWorld();
+    void initWorld(const QString& characterId, const QString& levelId);
     void initGameHud();
 
 private:

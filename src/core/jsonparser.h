@@ -17,7 +17,7 @@ public:
     void loadAllConfigs();
     CharacterConfig getCharacterConfig(const QString& charId);
     EnemyConfig getEnemyConfig(const QString& charId);
-    void loadLevel(const QString& levelName, qreal& outMapWidth,
+    void loadLevel(const QString& levelName, QString& outLevelMap, qreal& outMapWidth,
                    qreal& outMapHeight, std::vector<BattleZone>& outZones);
 private:
     JsonParser() = default;

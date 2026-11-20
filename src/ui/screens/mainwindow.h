@@ -25,14 +25,18 @@ public:
     static const int WINDOW_HEIGHT = 720;
 
 protected:
-    void paintEvent(QPaintEvent *event)override;
+    // void paintEvent(QPaintEvent *event)override;
 
 private:
     Ui::MainWindow *ui;
-    std::unique_ptr<GameView> m_gameview;
+    QString m_selectedCharacter = "liubei";
+
+    void switchPage();
+    void selectRole();
+    void selectLevel();
 
 private slots:
-    void on_pushButtonStartGame_clicked();
+    // void on_pushButtonStartGame_clicked();
 
 };
 #endif // MAINWINDOW_H

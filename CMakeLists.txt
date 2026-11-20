@@ -29,6 +29,7 @@ qt_add_executable(HalberdThreeKingdoms
     src/world/world.h src/world/world.cpp
     src/core/jsonparser.h src/core/jsonparser.cpp
     assets/images/characters/guanyu/guanyu.qrc
+    assets/images/ui/buttons/buttons.qrc
 )
 
 target_link_libraries(HalberdThreeKingdoms

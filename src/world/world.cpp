@@ -1,10 +1,10 @@
 #include "world.h"
 #include "jsonparser.h"
 
-World::World()
+World::World(const QString& characterId, const QString& levelId)
 {
-    initPlayer();
-    initBattleZone();
+    initPlayer(characterId);
+    initLevel(levelId);
 }
 
 World::~World()
@@ -16,10 +16,10 @@ World::~World()
     enemies.clear();
 }
 
-void World::initPlayer()
+void World::initPlayer(const QString& characterId)
 {
-    CharacterConfig liubeiConfig = JsonParser::getInstance().getCharacterConfig("guanyu");
-    player = new Player(liubeiConfig);
+    CharacterConfig playerConfig = JsonParser::getInstance().getCharacterConfig(characterId);
+    player = new Player(playerConfig);
 }
 
 void World::update(qreal dt, bool left, bool right, bool jump, bool attack)
@@ -92,11 +92,11 @@ void World::cleanUpDeadEnemies()
     }
 }
 
-void World::initBattleZone()
+void World::initLevel(const QString& levelId)
 {
     qDebug()<<"the initbattleZone is start";
     m_maxReachedX = player->x();
-    JsonParser::getInstance().loadLevel("level_1", m_mapTotalWidth, m_mapTotalHeight, m_battleZones);
+    JsonParser::getInstance().loadLevel(levelId, m_levelMapPath, m_mapTotalWidth, m_mapTotalHeight, m_battleZones);
 }
 
 void World::updateBattleZone(qreal dt)

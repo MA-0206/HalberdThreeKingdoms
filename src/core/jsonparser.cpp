@@ -3,7 +3,7 @@
 #include <fstream>
 #include <QDebug>
 
-void JsonParser::loadLevel(const QString& levelName, qreal& outMapWidth,
+void JsonParser::loadLevel(const QString& levelName, QString& outLevelMap, qreal& outMapWidth,
                            qreal& outMapHeight, std::vector<BattleZone>& outZones)
 {
     std::ifstream file(LEVEL_PATH + levelName.toStdString() + ".json");
@@ -15,6 +15,7 @@ void JsonParser::loadLevel(const QString& levelName, qreal& outMapWidth,
     nlohmann::json j;
     file >> j;
 
+    outLevelMap  = QString::fromStdString(j.value<std::string>("levelMapPath",""));
     outMapWidth  = j.value<qreal>("mapWidth",4000.0);
     outMapHeight = j.value<qreal>("mapHeight",400.0);
 
