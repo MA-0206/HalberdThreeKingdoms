@@ -18,7 +18,7 @@ World::~World()
 
 void World::initPlayer()
 {
-    CharacterConfig liubeiConfig = JsonParser::getInstance().getCharacterConfig("liubei");
+    CharacterConfig liubeiConfig = JsonParser::getInstance().getCharacterConfig("guanyu");
     player = new Player(liubeiConfig);
 }
 
@@ -97,21 +97,6 @@ void World::initBattleZone()
     qDebug()<<"the initbattleZone is start";
     m_maxReachedX = player->x();
     JsonParser::getInstance().loadLevel("level_1", m_mapTotalWidth, m_mapTotalHeight, m_battleZones);
-    // m_zone.triggerBox = QRectF(1200, 0, 50, 720);
-    // m_zone.lockLeftX = 500;
-    // m_zone.lockRightX = 2200;
-
-    // WaveConfig wave1;
-    // wave1.spawnPoints.push_back({1100.0,650.0 ,0.0, false});
-    // wave1.spawnPoints.push_back({2000.0, 650.0, 0.5, false});
-    // m_zone.waves.push_back(wave1);
-
-    // WaveConfig wave2;
-    // wave2.spawnPoints.push_back({1100.0, 650.0, 0.0, false});
-    // wave2.spawnPoints.push_back({1150.0,650.0, 0.5,false});
-    // wave2.spawnPoints.push_back({2000.0, 650.0, 0.0, false});
-    // wave2.spawnPoints.push_back({2050.0, 650.0,0.0, false});
-    // m_zone.waves.push_back(wave2);
 }
 
 void World::updateBattleZone(qreal dt)

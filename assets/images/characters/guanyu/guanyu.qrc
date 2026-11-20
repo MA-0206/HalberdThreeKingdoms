@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/assets/images/characters/guanyu">
+        <file alias="idle">guanyu_idle.png</file>
+        <file alias="run">guanyu_run.png</file>
+        <file alias="jump">guanyu_jump.png</file>
+        <file alias="attack">guanyu_attack.png</file>
+        <file alias="hurt">guanyu_hurt.png</file>
+        <file alias="dead">guanyu_dead.png</file>
+        <file alias="avatar">guanyu_avatar.png</file>
+    </qresource>
+</RCC>

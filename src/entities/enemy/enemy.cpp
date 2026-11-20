@@ -1,5 +1,4 @@
 #include "enemy.h"
-#include <algorithm>
 
 Enemy::Enemy(const EnemyConfig& config, QGraphicsItem* parent)
     :Entity(parent),myConfig(config)
@@ -19,12 +18,12 @@ void Enemy::update(qreal dt)
 void Enemy::loadEnemyAssets()
 {
     QString path = ":/assets/images/enemies/" + myConfig.name + "/";
-    animator.addAnimation("idle",path+"ys_idle",9,2,5,5);
-    animator.addAnimation("run",path+"ys_run",7,2,4,6);
-    animator.addAnimation("chase",path+"ys_run",7,2,4,4);
-    animator.addAnimation("hurt",path+"ys_hurt",10,2,5,4);
-    animator.addAnimation("dead",path+"ys_dead",14,2,7,3);
-    animator.addAnimation("attack",path+"ys_attack",12,2,6,4);
+    animator.addAnimation("idle",path+"idle",9,2,5,5);
+    animator.addAnimation("run",path+"run",7,2,4,6);
+    animator.addAnimation("chase",path+"run",7,2,4,4);
+    animator.addAnimation("hurt",path+"hurt",10,2,5,4);
+    animator.addAnimation("dead",path+"dead",14,2,7,3);
+    animator.addAnimation("attack",path+"attack",12,2,6,4);
 
     animator.play("idle");
     frameWidth = animator.getFrameWidth();

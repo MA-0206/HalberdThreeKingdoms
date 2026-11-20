@@ -81,6 +81,7 @@ void JsonParser::parserCharacterConfig()
     {
         CharacterConfig config;
         config.name = QString::fromStdString(value.value<std::string>("name","unkown"));
+        config.avatarPath = QString::fromStdString(value.value<std::string>("avatarPath","unkownPath"));
         config.baseHp = value.value<int>("baseHp",0);
         config.baseMp = value.value<int>("baseMp",0);
         config.baseExp = value.value<int>("baseExp",0);
@@ -92,7 +93,19 @@ void JsonParser::parserCharacterConfig()
         config.expGrowth = value.value<qreal>("expGrowth",0.0);
         config.moveSpeed = value.value<qreal>("moveSpeed",0.0);
         config.jumpSpeed = value.value<qreal>("jumpSpeed",0.0);
+        if(value.contains("animations"))
+        {
+            for(auto& [animName,animData]:value["animations"].items())
+            {
+                AnimationConfig anim;
+                anim.totalFrames = animData.value<int>("totalFrames",1);
+                anim.rows = animData.value<int>("rows",1);
+                anim.cols = animData.value<int>("cols",1);
+                anim.tickRate = animData.value<int>("tickRate",1);
 
+                config.animations[QString::fromStdString(animName)] = anim;
+            }
+        }
         m_characters[key] = std::move(config);
         qDebug()<< "parserCharacterConfig is successed:" << QString::fromStdString(key);
     }

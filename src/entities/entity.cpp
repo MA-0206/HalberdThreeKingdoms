@@ -56,7 +56,7 @@ void Entity::updateAnimation()
     case EntityState::Dead:   animator.play("dead"); break;
     default: break;
     }
-
+    setScale(scaleFactor);
     animator.update();
     QPixmap currentPix = animator.getCurrentPixmap();
     if(!currentPix.isNull())

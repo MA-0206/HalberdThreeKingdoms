@@ -83,7 +83,7 @@ void GameView::initWorld()
 
     gameHud = new GameHud(this);
     initGameHud();
-    gameHud->setAvatar(":/assets/images/characters/liubei/lb_avatar");
+    gameHud->setAvatar(world->getPlayer()->getConfig().avatarPath);
 }
 
 void GameView::upDateGame()
@@ -137,7 +137,29 @@ void GameView::updateCamera(qreal dt)
         targetX = std::clamp(targetX, minCenter, maxCenter);
     }
 
+    if(m_lastCamMaxX < camMaxX)
+    {
+        m_isSmoothCamera = true;
+        m_smoothTimer = 0.0;
+    }
+    m_lastCamMaxX = camMaxX;
+
+    if(m_isSmoothCamera)
+    {
+        m_smoothTimer += dt;
+        if(m_smoothTimer > 0.8)
+        {
+            m_isSmoothCamera = false;
+            view->centerOn(targetX,world->getPlayer()->y());
+        }else{
+            qreal currentCamX = view->mapToScene(view->viewport()->rect().center()).x();
+            qreal lerpFactor = 1.0 - std::exp(SMOOTH_SPEED * dt);
+            qreal nextX = currentCamX +  (targetX - currentCamX) * lerpFactor;
+            view->centerOn(nextX, world->getPlayer()->y());
+        }
+    }else{
     view->centerOn(targetX, world->getPlayer()->y());
+    }
 }
 
 void GameView::keyPressEvent(QKeyEvent* event)

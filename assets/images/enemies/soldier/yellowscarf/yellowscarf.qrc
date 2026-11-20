@@ -1,9 +1,9 @@
 <RCC>
     <qresource prefix="/assets/images/enemies/yellowscarf">
-        <file alias="ys_idle">yellowrefugees_idle.png</file>
-        <file alias="ys_run">yellowrefugees_run.png</file>
-        <file alias="ys_hurt">yellowrefugees_hurt.png</file>
-        <file alias="ys_dead">yellowrefugees_dead.png</file>
-        <file alias="ys_attack">yellowrefugees_attack.png</file>
+        <file alias="idle">yellowrefugees_idle.png</file>
+        <file alias="run">yellowrefugees_run.png</file>
+        <file alias="hurt">yellowrefugees_hurt.png</file>
+        <file alias="dead">yellowrefugees_dead.png</file>
+        <file alias="attack">yellowrefugees_attack.png</file>
     </qresource>
 </RCC>

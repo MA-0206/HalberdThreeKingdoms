@@ -3,8 +3,16 @@
 
 #include <entity.h>
 
+struct AnimationConfig{
+    int totalFrames;
+    int rows;
+    int cols;
+    int tickRate;
+};
+
 struct CharacterConfig{
     QString name;
+    QString avatarPath;
     qreal baseHp;
     qreal baseMp;
     qreal baseExp;
@@ -16,6 +24,7 @@ struct CharacterConfig{
     qreal jumpSpeed;
     int baseAttack;
     int attackGrowth;
+    std::map<QString,AnimationConfig> animations;
 };
 
 class Player : public Entity
@@ -23,6 +32,7 @@ class Player : public Entity
 public:
     Player(CharacterConfig& config, QGraphicsItem* parent = nullptr);
 
+    const CharacterConfig& getConfig() const {return myConfig;}
     void update(qreal dt) override;
     bool isAttackActive() const override;
     QRectF getAttackBox() const override;
@@ -31,7 +41,6 @@ public:
     void replayMagic(int magic);
     void deleteMagic(int magic);
     void addExp(int exp);
-
 
 protected:
     void updateState() override;

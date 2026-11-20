@@ -9,7 +9,6 @@
 #include <QElapsedTimer>
 #include <QFocusEvent>
 #include <QMouseEvent>
-#include "animator.h"
 #include "world.h"
 #include "gamehud.h"
 
@@ -50,6 +49,13 @@ private:
     bool isRightPressed = false;
     bool isJumpPressed = false;
     bool isAttackPressed = false;
+
+    qreal m_lastCamMaxX = 0.0;
+    qreal m_smoothTimer = 0.0;
+    bool m_isSmoothCamera = false;
+
+    // The smaller the slope, the faster one goes down.
+    const qreal SMOOTH_SPEED = -8.0;
 
     void createPlayerItem();
     void upDateGame();

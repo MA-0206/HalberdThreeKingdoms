@@ -1,6 +1,7 @@
 {
     "liubei":{
         "name":"liubei",
+        "avatarPath":":/assets/images/characters/liubei/avatar",
         "baseHp":100,
         "baseMp":50,
         "baseExp":100,
@@ -11,10 +12,19 @@
         "mpGrowth": 1.2,
         "expGrowth": 1.5,
         "moveSpeed": 300.0,
-        "jumpSpeed": -800.0
+        "jumpSpeed": -800.0,
+        "animations":{
+            "idle":{"totalFrames":18, "rows":2, "cols":9, "tickRate":6},
+            "run":{"totalFrames":7, "rows":1, "cols":7, "tickRate":3},
+            "jump":{"totalFrames":23, "rows":3, "cols":8, "tickRate":4},
+            "attack":{"totalFrames":11, "rows":2, "cols":6, "tickRate":2},
+            "hurt":{"totalFrames":9, "rows":2, "cols":5, "tickRate":3},
+            "dead":{"totalFrames":16, "rows":2, "cols":8, "tickRate":4}
+        }
     },
     "guanyu":{
         "name":"guanyu",
+        "avatarPath":":/assets/images/characters/guanyu/avatar",
         "baseHp":120,
         "baseMp":40,
         "baseExp":100,
@@ -25,6 +35,14 @@
         "mpGrowth": 1.1,
         "expGrowth": 1.5,
         "moveSpeed": 280.0,
-        "jumpSpeed": -750.0
+        "jumpSpeed": -750.0,
+        "animations":{
+            "idle":{"totalFrames":24, "rows":3, "cols":8, "tickRate":5},
+            "run":{"totalFrames":12, "rows":2, "cols":6, "tickRate":5},
+            "jump":{"totalFrames":24, "rows":3, "cols":8, "tickRate":5},
+            "attack":{"totalFrames":11, "rows":2, "cols":6, "tickRate":3},
+            "hurt":{"totalFrames":10, "rows":2, "cols":5, "tickRate":3},
+            "dead":{"totalFrames":24, "rows":3, "cols":8, "tickRate":5}
+        }
     }
 }

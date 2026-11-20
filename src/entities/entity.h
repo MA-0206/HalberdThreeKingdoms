@@ -57,6 +57,7 @@ protected:
     qreal hurtStunTimer = 0.0;
     qreal knockbackTimer = 0.0;
     qreal knockbackSpeed = 0.0;
+    qreal scaleFactor = 1.1;
     bool isOnGround = false;
     bool m_isDead = false;
 
