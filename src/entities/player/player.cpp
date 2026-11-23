@@ -1,5 +1,4 @@
 #include "player.h"
-#include <algorithm>
 
 Player::Player(CharacterConfig& config, QGraphicsItem* parent):Entity(parent),myConfig(config)
 {
@@ -27,12 +26,6 @@ void Player::initStats()
 void Player::loadPlayerAssets()
 {
     QString path = ":/assets/images/characters/" + myConfig.name + "/";
-    // animator.addAnimation("idle",QPixmap(path + "idle"),18,2,9,6);
-    // animator.addAnimation("run",QPixmap(path + "run"),7,1,7,3);
-    // animator.addAnimation("jump",QPixmap(path + "jump"),23,3,8,4);
-    // animator.addAnimation("attack",QPixmap(path + "attack"),11,2,6,2);
-    // animator.addAnimation("hurt",QPixmap(path + "hurt"),9,2,5,3);
-    // animator.addAnimation("dead", QPixmap(path + "dead"),16,2,8,4);
     for(const auto& pair:myConfig.animations)
     {
         QString animName = pair.first;

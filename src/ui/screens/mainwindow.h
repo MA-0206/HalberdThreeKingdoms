@@ -4,8 +4,7 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QPaintEvent>
-#include <memory>
-#include "gameview.h"
+#include "PageManager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,19 +23,13 @@ public:
     static const int WINDOW_WIDTH = 1280;
     static const int WINDOW_HEIGHT = 720;
 
-protected:
-    // void paintEvent(QPaintEvent *event)override;
-
 private:
     Ui::MainWindow *ui;
-    QString m_selectedCharacter = "liubei";
+    PageManager* m_pageManager;
+    // QString m_selectedCharacter = "liubei";
 
-    void switchPage();
-    void selectRole();
-    void selectLevel();
-
-private slots:
-    // void on_pushButtonStartGame_clicked();
-
+    // void switchPage();
+    // void selectRole();
+    // void selectLevel();
 };
 #endif // MAINWINDOW_H

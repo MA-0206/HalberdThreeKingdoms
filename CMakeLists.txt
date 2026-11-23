@@ -30,6 +30,10 @@ qt_add_executable(HalberdThreeKingdoms
     src/core/jsonparser.h src/core/jsonparser.cpp
     assets/images/characters/guanyu/guanyu.qrc
     assets/images/ui/buttons/buttons.qrc
+    src/ui/screens/pagemainmenu.h src/ui/screens/pagemainmenu.cpp src/ui/screens/pagemainmenu.ui
+    src/ui/screens/pageselectrole.h src/ui/screens/pageselectrole.cpp src/ui/screens/pageselectrole.ui
+    src/ui/screens/pageworldmap.h src/ui/screens/pageworldmap.cpp src/ui/screens/pageworldmap.ui
+    src/ui/pagemanager.h src/ui/pagemanager.cpp
 )
 
 target_link_libraries(HalberdThreeKingdoms

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PageWorldMap</class>
+ <widget class="QWidget" name="PageWorldMap">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#PageWorldMap {border-image: url(:/assets/images/ui/loading/worldMap);}</string>
+  </property>
+  <widget class="QPushButton" name="btn_level1">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>520</y>
+     <width>181</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#PageWorldMap {border-image: url(:/assets/images/ui/loading/worldMap);}</string>
+   </property>
+   <property name="text">
+    <string>firstLevel</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_backToMain">
+   <property name="geometry">
+    <rect>
+     <x>1110</x>
+     <y>630</y>
+     <width>161</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string>return</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
