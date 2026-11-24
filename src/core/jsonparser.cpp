@@ -144,6 +144,35 @@ void JsonParser::parserEnemyConfig()
     }
 }
 
+void JsonParser::parserPortraitConfig()
+{
+    std::ifstream file(PORTRAIT_PATH);
+    if(!file.is_open())
+    {
+        qDebug()<<"the PORTRAIT_PATH open is failed!";
+        return;
+    }
+
+    nlohmann::json j;
+    file >> j;
+    if(j.contains("rolePortraits"))
+    {
+        for(auto& [key,value]:j["rolePortraits"].items())
+        {
+            PortraitConfig config;
+            config.staticPath = QString::fromStdString(value.value("staticPath","unKownPath"));
+            config.dynamicPath = QString::fromStdString(value.value("dynamicPath","unKownPath"));
+            config.totalFrames = value.value<int>("totalFrames", 0);
+            config.rows = value.value<int>("rows", 0);
+            config.cols = value.value<int>("cols", 0);
+            config.tickRate = value.value<int>("tickRate", 0);
+
+            m_portraits[key] = std::move(config);
+            qDebug()<<"parserPortraitConfig is successed:"<<QString::fromStdString(key);
+        }
+    }
+}
+
 CharacterConfig JsonParser::getCharacterConfig(const QString& charId)
 {
     std::string id = charId.toStdString();
@@ -166,4 +195,17 @@ EnemyConfig JsonParser::getEnemyConfig(const QString& charId)
     }
     qDebug()<< "the enemyConfig is not get:" << charId;
     return EnemyConfig();
+}
+
+PortraitConfig JsonParser::getPortraitConfig(const QString& charId)
+{
+    parserPortraitConfig();
+    std::string id = charId.toStdString();
+    if(m_portraits.find(id) != m_portraits.end())
+    {
+        qDebug()<<"the portraitConfig is successed get:"<< charId;
+        return m_portraits[id];
+    }
+    qDebug()<< "the portraitConfig is not get:"<< charId;
+    return PortraitConfig();
 }

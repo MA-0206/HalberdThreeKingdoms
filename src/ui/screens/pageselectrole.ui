@@ -16,60 +16,10 @@
   <property name="styleSheet">
    <string notr="true">#PageSelectRole{border-image:url(:assets/images/ui/loading/secR_bcGrd);}</string>
   </property>
-  <widget class="QPushButton" name="btn_liubei">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>10</y>
-     <width>231</width>
-     <height>541</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-		border: none;
-		background: transparent;
-		color: white;
-		font-size: 24px;
-}
-
-QPushButton: hover{
-		border: 2px solid yellow;
-}</string>
-   </property>
-   <property name="text">
-    <string>liubei</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btn_guanyu">
-   <property name="geometry">
-    <rect>
-     <x>530</x>
-     <y>10</y>
-     <width>221</width>
-     <height>541</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-		border: none;
-		background: transparent;
-		font-size: 24px;
-		color:white;
-}
-
-QPushButton:hover {
-		border: 2px solid yellow ;
-}</string>
-   </property>
-   <property name="text">
-    <string>guanyu</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btn_confirmRole">
    <property name="geometry">
     <rect>
-     <x>1060</x>
+     <x>1010</x>
      <y>610</y>
      <width>211</width>
      <height>71</height>

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/assets/images/ui/characters/guanyu">
+        <file alias="static">guanyu_selectRole_static.png</file>
+        <file alias="dynamic">guanyu_selectRole_dynamic.png</file>
+    </qresource>
+</RCC>

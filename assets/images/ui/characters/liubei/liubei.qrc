@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/assets/images/ui/characters/liubei">
+        <file alias="static">liubei_selectRole_static.png</file>
+        <file alias="dynamic">liubei_selectRole_dynamic.png</file>
+    </qresource>
+</RCC>

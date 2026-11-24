@@ -1,0 +1,20 @@
+{
+    "rolePortraits":{
+        "liubei":{
+            "staticPath":":/assets/images/ui/characters/liubei/static",
+            "dynamicPath":":/assets/images/ui/characters/liubei/dynamic",
+            "totalFrames":21,
+            "rows":3,
+            "cols":8,
+            "tickRate":6
+        },
+        "guanyu":{
+            "staticPath":":/assets/images/ui/characters/guanyu/static",
+            "dynamicPath":":/assets/images/ui/characters/guanyu/dynamic",
+            "totalFrames":31,
+            "rows":4,
+            "cols":8,
+            "tickRate":6
+        }
+    }
+}

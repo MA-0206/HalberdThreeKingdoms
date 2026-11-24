@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 
+    this->setWindowTitle("执戈三国");
     m_pageManager = new PageManager(ui->stackedWidget,this);
     // switchPage();
     // selectRole();

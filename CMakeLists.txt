@@ -34,6 +34,9 @@ qt_add_executable(HalberdThreeKingdoms
     src/ui/screens/pageselectrole.h src/ui/screens/pageselectrole.cpp src/ui/screens/pageselectrole.ui
     src/ui/screens/pageworldmap.h src/ui/screens/pageworldmap.cpp src/ui/screens/pageworldmap.ui
     src/ui/pagemanager.h src/ui/pagemanager.cpp
+    src/engine/roleselectwidget.h src/engine/roleselectwidget.cpp
+    assets/images/ui/characters/liubei/liubei.qrc
+    assets/images/ui/characters/guanyu/guanyu.qrc
 )
 
 target_link_libraries(HalberdThreeKingdoms

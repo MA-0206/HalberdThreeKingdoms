@@ -19,17 +19,30 @@
   <widget class="QPushButton" name="btn_level1">
    <property name="geometry">
     <rect>
-     <x>590</x>
-     <y>520</y>
-     <width>181</width>
-     <height>81</height>
+     <x>500</x>
+     <y>440</y>
+     <width>301</width>
+     <height>191</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">#PageWorldMap {border-image: url(:/assets/images/ui/loading/worldMap);}</string>
+    <string notr="true">QPushButton {
+		border: none;
+		background: transparent;
+		background-image:url( :/assets/images/ui/buttons/level_1);
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+}
+
+QPushButton:hover {
+		background-image:url(:/assets/images/ui/buttons/level1_hover);
+}
+
+</string>
    </property>
    <property name="text">
-    <string>firstLevel</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_backToMain">

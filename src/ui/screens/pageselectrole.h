@@ -2,6 +2,7 @@
 #define PAGESELECTROLE_H
 
 #include <QWidget>
+#include "roleselectwidget.h"
 
 namespace Ui {
 class PageSelectRole;
@@ -22,7 +23,11 @@ private:
     Ui::PageSelectRole *ui;
 
 private:
-    QString m_selectedRole = "liubei";
+    RoleSelectWidget* liubeiWidget;
+    RoleSelectWidget* guanyuWidget;
+
+    QString m_selectedRole = "";
+    void initSelectWidget();
     void selectRole();
 };
 
