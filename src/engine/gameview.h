@@ -19,6 +19,7 @@ public:
     explicit GameView(const QString& characterId, const QString& levelId,
                       QWidget *parent = nullptr);QString m_levelId;
 
+    void startGame();
 protected:
     void keyPressEvent(QKeyEvent* event)override;
     void keyReleaseEvent(QKeyEvent* event)override;

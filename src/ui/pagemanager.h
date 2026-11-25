@@ -7,6 +7,7 @@
 #include "pageselectrole.h"
 #include "pageworldmap.h"
 #include "gameview.h"
+#include "loadingwidget.h"
 
 class PageManager : public QObject
 {
@@ -16,6 +17,9 @@ public:
     ~PageManager();
 
 private:
+    LoadingWidget* m_loadWidget;
+    QWidget* m_targetPage;
+
     QStackedWidget* m_stack;
     PageMainMenu* m_mainMenu;
     PageSelectRole* m_selectRole;
@@ -28,6 +32,7 @@ private:
     void initPages();
     void switchPages();
     void startBattle(const QString& levelId);
+    void switchPageWithLoading(QWidget* targetPage);
 
 signals:
 };

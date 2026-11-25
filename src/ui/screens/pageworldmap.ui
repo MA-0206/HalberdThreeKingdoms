@@ -48,17 +48,23 @@ QPushButton:hover {
   <widget class="QPushButton" name="btn_backToMain">
    <property name="geometry">
     <rect>
-     <x>1110</x>
-     <y>630</y>
+     <x>1080</x>
+     <y>610</y>
      <width>161</width>
-     <height>51</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">QPushButton {
+		border-image:url( :/assets/images/ui/buttons/return);
+}
+
+QPushButton:hover {
+		border-image:url(:/assets/images/ui/buttons/return_hover);
+}</string>
    </property>
    <property name="text">
-    <string>return</string>
+    <string/>
    </property>
   </widget>
  </widget>

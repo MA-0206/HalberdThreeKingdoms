@@ -33,7 +33,7 @@ void GameView::initSystems()
     layout = new QVBoxLayout(this);
     gameTimer = new QTimer(this);
     connect(gameTimer,&QTimer::timeout,this,&GameView::upDateGame);
-    gameTimer->start(16);
+    // gameTimer->start(16);
 }
 
 // Remove the border and hide the scrollbar
@@ -125,6 +125,15 @@ void GameView::initGameHud()
     gameHud->raise();
     gameHud->show();
     gameHud->updateStats(world->getPlayer()->getStats());
+}
+
+void GameView::startGame()
+{
+    if(!gameTimer->isActive())
+    {
+        frameTimer.restart();
+        gameTimer->start(16);
+    }
 }
 
 void GameView::updateCamera(qreal dt)

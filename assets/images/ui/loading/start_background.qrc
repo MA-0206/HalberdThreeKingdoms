@@ -3,6 +3,7 @@
         <file alias="start_background">menu_background.png</file>
         <file alias="secR_bcGrd">selectRoleBackground.png</file>
         <file alias="worldMap">worldmap.png</file>
+        <file alias="progress">loadingProgress.png</file>
     </qresource>
     <qresource prefix="/new/prefix1"/>
 </RCC>

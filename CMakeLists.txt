@@ -37,6 +37,7 @@ qt_add_executable(HalberdThreeKingdoms
     src/engine/roleselectwidget.h src/engine/roleselectwidget.cpp
     assets/images/ui/characters/liubei/liubei.qrc
     assets/images/ui/characters/guanyu/guanyu.qrc
+    src/ui/component/loadingwidget.h src/ui/component/loadingwidget.cpp
 )
 
 target_link_libraries(HalberdThreeKingdoms
@@ -53,6 +54,7 @@ target_include_directories(HalberdThreeKingdoms PRIVATE
     src/entities/player
     src/entities/enemy
     src/ui
+    src/ui/component
     src/ui/screens
     src/ui/hud
     src/world

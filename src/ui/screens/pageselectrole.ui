@@ -19,14 +19,23 @@
   <widget class="QPushButton" name="btn_confirmRole">
    <property name="geometry">
     <rect>
-     <x>1010</x>
-     <y>610</y>
-     <width>211</width>
-     <height>71</height>
+     <x>1020</x>
+     <y>580</y>
+     <width>201</width>
+     <height>81</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+		border-image:url( :/assets/images/ui/buttons/confirm);
+}
+
+QPushButton:hover {
+		border-image:url(:/assets/images/ui/buttons/confirm_hover);
+}</string>
+   </property>
    <property name="text">
-    <string>confirm</string>
+    <string/>
    </property>
   </widget>
  </widget>

@@ -3,5 +3,9 @@
         <file alias="startGame">start_game.png</file>
         <file alias="level_1">yellowscarfOne.png</file>
         <file alias="level1_hover">level1_hover.png</file>
+        <file alias="confirm">selectRole_confirm.png</file>
+        <file alias="confirm_hover">selectRole_confirm_hover.png</file>
+        <file alias="return">worldMap_return.png</file>
+        <file alias="return_hover">worldMap_return_hover.png</file>
     </qresource>
 </RCC>
