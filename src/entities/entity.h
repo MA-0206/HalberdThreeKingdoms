@@ -26,10 +26,10 @@ public:
     bool canBeRemoved() const {return m_isDead && animator.isFinshed();}
     virtual bool isAttackActive() const {return false;}
     virtual QRectF getAttackBox() const {return QRectF();}
+    virtual QRectF getHurtBox() const;
 
     void tick(qreal dt);
     void takeDamage(int damage, Entity* attacker = nullptr);
-    QRectF getHurtBox() const; 
 protected:
     virtual void updateState() = 0;
     virtual void onHurt(int damage, Entity* attacker){}
@@ -50,6 +50,8 @@ protected:
     int frameHeight = 0;
     int jumpCount = 0;
     int maxJumpCount = 1;
+    int maxComboCount = 1;
+    int m_comboIndex = 1;
     qreal speedY = 0.0;
     qreal gravity = 2000.0;
     qreal groundY = 650.0;
@@ -57,7 +59,7 @@ protected:
     qreal hurtStunTimer = 0.0;
     qreal knockbackTimer = 0.0;
     qreal knockbackSpeed = 0.0;
-    qreal scaleFactor = 1.1;
+    qreal scaleFactor = 1.0;
     bool isOnGround = false;
     bool m_isDead = false;
 

@@ -3,10 +3,12 @@
         <file alias="idle">liubei_idle.png</file>
         <file alias="jump">liubei_jump.png</file>
         <file alias="run">liubei_run.png</file>
-        <file alias="attack">liubei_attack.png</file>
+        <file alias="attack1">liubei_attack1.png</file>
         <file alias="avatar">liubei_avatar.png</file>
         <file alias="hurt">liubei_hurt.png</file>
         <file alias="dead">liubei_dead.png</file>
+        <file alias="attack2">liubei_attack2.png</file>
+        <file alias="attack3">liubei_attack3.png</file>
     </qresource>
     <qresource prefix="/new/prefix1"/>
 </RCC>

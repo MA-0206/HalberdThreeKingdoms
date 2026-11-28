@@ -23,7 +23,7 @@ void Enemy::loadEnemyAssets()
     animator.addAnimation("chase",path+"run",7,2,4,4);
     animator.addAnimation("hurt",path+"hurt",10,2,5,4);
     animator.addAnimation("dead",path+"dead",14,2,7,3);
-    animator.addAnimation("attack",path+"attack",12,2,6,4);
+    animator.addAnimation("attack1",path+"attack1",12,2,6,6);
 
     animator.play("idle");
     frameWidth = animator.getFrameWidth();

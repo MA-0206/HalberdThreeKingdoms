@@ -4,6 +4,6 @@
         <file alias="run">yellowrefugees_run.png</file>
         <file alias="hurt">yellowrefugees_hurt.png</file>
         <file alias="dead">yellowrefugees_dead.png</file>
-        <file alias="attack">yellowrefugees_attack.png</file>
+        <file alias="attack1">yellowrefugees_attack1.png</file>
     </qresource>
 </RCC>

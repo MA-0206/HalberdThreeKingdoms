@@ -61,7 +61,7 @@ void LoadingWidget::initLoading()
 {
     loadingTimer = new QTimer(this);
     connect(loadingTimer, &QTimer::timeout, this, [=](){
-        m_currentValue += 2;
+        m_currentValue += 10;
         m_progressBar->setValue(m_currentValue);
         if(m_currentValue >= 100)
         {

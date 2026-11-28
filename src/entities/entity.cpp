@@ -51,9 +51,9 @@ void Entity::updateAnimation()
     case EntityState::Run:    animator.play("run"); break;
     case EntityState::Jump:   animator.play("jump"); break;
     case EntityState::Chase:  animator.play("chase"); break;
-    case EntityState::Attack: animator.play("attack"); break;
     case EntityState::Hurt:   animator.play("hurt"); break;
     case EntityState::Dead:   animator.play("dead"); break;
+    case EntityState::Attack: animator.play("attack" + QString::number(m_comboIndex)); break;
     default: break;
     }
     setScale(scaleFactor);
@@ -64,8 +64,8 @@ void Entity::updateAnimation()
         setPixmap(currentPix);
     }
 
-    // updateDebugHurt();
-    // updateDebugAttack();
+    updateDebugHurt();
+    updateDebugAttack();
 }
 
 void Entity::takeDamage(int damage, Entity* attacker)

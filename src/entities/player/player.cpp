@@ -12,6 +12,7 @@ Player::Player(CharacterConfig& config, QGraphicsItem* parent):Entity(parent),my
 void Player::initStats()
 {
     maxJumpCount = 2;
+    maxComboCount = 3;
     stats.base.name   = myConfig.name;
     stats.base.maxHp  = myConfig.baseHp;
     stats.base.maxMp  = myConfig.baseMp;
@@ -48,10 +49,25 @@ void Player::update(qreal dt)
         applyGravity(dt, false, 0);
         return;
     }
+    resetAttack(dt);
     updateInputDebounce();
     handleMove(dt);
     applyGravity(dt,jumpTrigger,myConfig.jumpSpeed);
 
+}
+
+void Player::resetAttack(qreal dt)
+{
+    if(currentState != EntityState::Attack && comboWindowTimer > 0.0f)
+    {
+        comboWindowTimer -= dt;
+    }
+    if(comboWindowTimer < 0.0f)
+    {
+        comboWindowTimer = 0.0f;
+        isAttackBuffered = false;
+        m_comboIndex = 1;
+    }
 }
 
 void Player::updateInputDebounce()
@@ -72,13 +88,22 @@ void Player::handleInput(bool left, bool right, bool jump, bool attack)
     isRightPressed = right;
     isJumpPressed = jump;
     isAttackPressed = attack;
+    if(isAttackPressed && !lastAttackPressed)
+    {
+        isAttackBuffered = true;
+    }
+    lastAttackPressed = isAttackPressed;
 }
 
 // Player movement logic
 void Player::handleMove(qreal dt)
 {
-    qreal moveSpeed = 300.0;
-    qreal moveDistance = moveSpeed * dt;
+    if(currentState == EntityState::Attack)
+    {
+        advanceAttack(dt);
+        return;
+    }
+    qreal moveDistance = myConfig.moveSpeed * dt;
 
     if(isRightPressed)
     {
@@ -90,10 +115,38 @@ void Player::handleMove(qreal dt)
         setX(x()- moveDistance);
         setTransform(QTransform::fromScale(-1,1));
     }
-    qreal halfWidth = animator.getFrameWidth()/2;
+    clampRolePos();
+}
+
+void Player::advanceAttack(qreal dt)
+{
+    if (isOnGround) {
+        return;
+    }
+    else
+    {
+        qreal moveDistance = myConfig.moveSpeed * dt;
+        bool facingRight = (transform().m11() > 0);
+        if (facingRight) {
+            if (isRightPressed) {
+                setX(x() + moveDistance);
+            }
+        } else {
+            if (isLeftPressed) {
+                setX(x() - moveDistance);
+            }
+        }
+        clampRolePos();
+        return;
+    }
+}
+
+void Player::clampRolePos()
+{
+    qreal halfWidth = 60;
     if(x() - halfWidth < minXBound)
     {
-    setX(minXBound + halfWidth);
+        setX(minXBound + halfWidth);
     }
     if(x() + halfWidth > maxXBound)
     {
@@ -106,13 +159,24 @@ bool Player::isAttackActive() const
     return(currentState == EntityState::Attack && animator.getCurrentFrame() == 1);
 }
 
+QRectF Player::getHurtBox() const
+{
+    qreal bodyWidth = 60;
+    qreal bodyHeight = 125;
+
+    qreal left = x() - (bodyWidth/2);
+    qreal top = y()- (frameHeight * 0.5);
+
+    return QRectF(left, top, bodyWidth, bodyHeight);
+}
+
 QRectF Player::getAttackBox() const
 {
-    qreal atkWidth = animator.getFrameWidth()* 0.4;
-    qreal atkHeight = animator.getFrameHeight()* 0.6;
+    qreal atkWidth = animator.getFrameWidth()* 0.3;
+    qreal atkHeight = animator.getFrameHeight()* 0.4;
 
     qreal offSetX = animator.getFrameWidth()* 0.1;
-    qreal top = y()- (animator.getFrameHeight()*0.8);
+    qreal top = y()- (animator.getFrameHeight()*0.4);
     qreal left;
     if(transform().m11() > 0)
     {
@@ -137,6 +201,40 @@ void Player::onDeath(int damage, Entity* attacker)
     qDebug()<<"the "<<myConfig.name<<"was"<< attacker->getName()<<"killed!"<< "the Fatal damage:"<<damage;
 }
 
+void Player::handleAttackEnd()
+{
+    if(isAttackBuffered && m_comboIndex < maxComboCount)
+    {
+        startAttack();
+        return;
+    }
+
+    m_comboIndex = 1;
+    isAttackBuffered = false;
+    comboWindowTimer = COMBO_WINDOW_TIME;
+
+    if(!isOnGround) {
+        currentState = EntityState::Jump;
+    } else if(isLeftPressed || isRightPressed) {
+        currentState = EntityState::Run;
+    } else {
+        currentState = EntityState::Idle;
+    }
+}
+
+void Player::startAttack()
+{
+    if(currentState != EntityState::Attack || m_comboIndex > maxComboCount)
+    {
+        m_comboIndex = 1;
+    }else{
+        m_comboIndex++;
+    }
+    currentState = EntityState::Attack;
+    isAttackBuffered = false;
+    comboWindowTimer = COMBO_WINDOW_TIME;
+}
+
 void Player::updateState()
 {
     switch(currentState)
@@ -153,25 +251,33 @@ void Player::updateState()
         }
         break;
     case EntityState::Attack:
+        if(m_isDead || isStunned())
+        {
+            currentState = EntityState::Idle;
+            m_comboIndex = 1;
+            return;
+        }
         if(animator.isFinshed())
         {
-            if(!isOnGround)
-            {
-                currentState = EntityState::Jump;
-            }
-            else if(isLeftPressed || isRightPressed)
-            {
-                currentState = EntityState::Run;
-            }
-            else{
-                currentState = EntityState::Idle;
-            }
+            handleAttackEnd();
+            return;
+            // if(!isOnGround)
+            // {
+            //     currentState = EntityState::Jump;
+            // }
+            // else if(isLeftPressed || isRightPressed)
+            // {
+            //     currentState = EntityState::Run;
+            // }
+            // else{
+            //     currentState = EntityState::Idle;
+            // }
         }
         break;
     case EntityState::Idle:
-        if(isAttackPressed && currentState != EntityState::Attack)
+        if(isAttackBuffered)
         {
-            currentState = EntityState::Attack;
+            startAttack();
             return;
         }
         if(!isOnGround)
@@ -184,9 +290,9 @@ void Player::updateState()
         }
         break;
     case EntityState::Run:
-        if(isAttackPressed && currentState != EntityState::Attack)
+        if(isAttackBuffered)
         {
-            currentState = EntityState::Attack;
+            startAttack();
             return;
         }
         if(!isOnGround)
@@ -199,9 +305,9 @@ void Player::updateState()
         }
         break;
     case EntityState::Jump:
-        if(isAttackPressed && currentState != EntityState::Attack)
+        if(isAttackBuffered)
         {
-            currentState = EntityState::Attack;
+            startAttack();
             return;
         }
         if(isOnGround)

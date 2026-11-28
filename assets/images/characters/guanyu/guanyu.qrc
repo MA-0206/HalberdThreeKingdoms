@@ -3,9 +3,11 @@
         <file alias="idle">guanyu_idle.png</file>
         <file alias="run">guanyu_run.png</file>
         <file alias="jump">guanyu_jump.png</file>
-        <file alias="attack">guanyu_attack.png</file>
         <file alias="hurt">guanyu_hurt.png</file>
         <file alias="dead">guanyu_dead.png</file>
         <file alias="avatar">guanyu_avatar.png</file>
+        <file alias="attack2">guanyu_attack2.png</file>
+        <file alias="attack3">guanyu_attack3.png</file>
+        <file alias="attack1">guanyu_attack1.png</file>
     </qresource>
 </RCC>

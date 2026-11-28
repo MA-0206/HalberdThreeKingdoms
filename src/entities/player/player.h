@@ -35,6 +35,7 @@ public:
     const CharacterConfig& getConfig() const {return myConfig;}
     void update(qreal dt) override;
     bool isAttackActive() const override;
+    QRectF getHurtBox() const override;
     QRectF getAttackBox() const override;
     void handleInput(bool left, bool right, bool jump, bool attack);
     void heal(int amount);
@@ -55,10 +56,19 @@ private:
     bool isAttackPressed = false;
     bool wasJumpPressed = false;
     bool jumpTrigger = false;
+    bool isAttackBuffered = false;
+    bool lastAttackPressed = false;
+    qreal comboWindowTimer = 0.0f;
+    const qreal COMBO_WINDOW_TIME = 0.5f;
 
     void loadPlayerAssets();
-    void handleMove(qreal dt);
     void initStats();
+    void resetAttack(qreal dt);
+    void startAttack();
+    void handleAttackEnd();
+    void handleMove(qreal dt);
+    void clampRolePos();
+    void advanceAttack(qreal dt);
     void upgradeState();
     void updateInputDebounce();
 };
